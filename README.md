@@ -1,12 +1,23 @@
 # Knot / Legends
 
 This is a static Knot prototype with Supabase authentication added as an
-enhancement layer. The original landing page, dashboard, queue UI, and design
-system are kept intact.
+enhancement layer. The landing page, dashboard, queue UI, and admin shell are
+kept, while the old preview/demo switcher and unused example query have been
+removed.
+
+## Account access
+
+The site now supports Supabase email/password sign-up, sign-in, password
+reset, and protected dashboard/queue navigation.
+
+If Supabase email confirmation is enabled, a new user must confirm their email
+before they can sign in. Set the redirect URL in Supabase Authentication to the
+URL where this site is hosted.
 
 ## Admin access
 
-The admin panel is now protected by Supabase email/password authentication.
+The admin panel additionally requires a Supabase email/password session with
+the server-controlled admin role.
 The browser does not use a local password, cookie flag, or custom `localStorage`
 switch that could be bypassed by changing browser storage.
 
@@ -30,11 +41,12 @@ endpoint; hiding a static panel alone is not an authorization boundary.
 
 ## Files added
 
-- `admin-guard.js` — injects the sign-in gate, protects navigation to the admin
-  view, verifies the server-controlled admin role, and removes the preview
-  switcher from the shipped UI.
+- `auth.js` — adds sign-up, sign-in, password reset, and protected app
+  navigation.
+- `admin-guard.js` — injects the admin sign-in gate, verifies the
+  server-controlled admin role, and handles admin sign-out.
 - `supabase-client.js` — existing browser client used by the guard.
 
-The existing `index.html`, `styles.css`, and `script.js` were not rewritten;
-`index.html` only receives the one script-loader line needed to activate the
-enhancement.
+The original visual design remains in place, but the demo switcher CSS/markup
+and its JavaScript synchronization code were removed because they were only
+preview/template controls.

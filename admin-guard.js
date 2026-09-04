@@ -5,7 +5,7 @@
    - Supabase email/password sign-in for the admin view
    - a server-controlled app_metadata.role check
    - session-aware locking when a session expires or signs out
-   - removal of the demo switcher from the shipped experience
+   - admin sign-out and session-aware locking
 
    Do not replace this with a client-only password or a localStorage flag.
    Those only hide the panel and are not security controls.
@@ -202,7 +202,9 @@ function lockAdmin() {
   signOutButton = null;
 
   if (document.querySelector(".view.active") === adminView && originalGoTo) {
-    originalGoTo("dashboard");
+    // Use the public guarded navigation path so signing out cannot expose
+    // the dashboard to an unauthenticated browser session.
+    window.goTo?.("dashboard");
   }
 }
 
@@ -266,15 +268,9 @@ async function signIn(event) {
   unlockAndOpen();
 }
 
-function removeTemplateSwitcher() {
-  // The switcher is a preview affordance, not part of the shipped product.
-  document.querySelector(".demo-switcher")?.remove();
-}
-
 async function initialize() {
   injectGateStyles();
   createGate();
-  removeTemplateSwitcher();
 
   originalGoTo = window.goTo;
   if (typeof originalGoTo !== "function") {

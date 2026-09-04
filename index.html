@@ -569,16 +569,8 @@
   </div>
 </section>
 
-<!-- Demo switcher — preview affordance for this deliverable only -->
-<div class="demo-switcher glass-strong">
-  <button data-view="landing" class="active" onclick="goTo('landing')">Landing</button>
-  <button data-view="dashboard" onclick="goTo('dashboard')">Dashboard</button>
-  <button data-view="queue" onclick="goTo('queue')">Queue</button>
-  <button data-view="admin" onclick="goTo('admin')">Admin</button>
-</div>
-
 <script src="script.js"></script>
-<!-- Security and app-only enhancements. The existing UI files remain unchanged. -->
+<script type="module" src="auth.js"></script>
 <script type="module" src="admin-guard.js"></script>
 </body>
 </html>

@@ -16,11 +16,6 @@ function goTo(name) {
     el.classList.toggle("active", v === name);
   });
 
-  // Sync the demo switcher's active pill
-  document.querySelectorAll(".demo-switcher button").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.view === name);
-  });
-
   // Close mobile sidebar on navigation
   document.querySelectorAll(".sidebar").forEach((s) => s.classList.remove("open"));
 
