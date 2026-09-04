@@ -8,6 +8,12 @@ local.properties
 # Log/OS Files
 *.log
 
+# Local environment configuration
+.env
+.env.local
+.env.*.local
+!.env.example
+
 # Android Studio generated files and folders
 captures/
 .externalNativeBuild/
