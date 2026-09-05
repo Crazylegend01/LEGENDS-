@@ -24,6 +24,8 @@ function goTo(name) {
 
   // Brief loader flash between app views for a sense of live data
   if (name !== "landing") flashLoader(420);
+
+  window.dispatchEvent(new CustomEvent("knot:view", { detail: { name } }));
 }
 
 function toggleSidebar() {

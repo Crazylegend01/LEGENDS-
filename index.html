@@ -238,8 +238,8 @@
       <div class="side-foot">
         <div class="avatar"></div>
         <div>
-          <b>Amara Chen</b>
-          <span>Café Loop · Owner</span>
+          <b id="userName">Your account</b>
+          <span id="userRole">Owner</span>
         </div>
       </div>
     </aside>
@@ -247,8 +247,8 @@
     <main class="main-col">
       <div class="topbar glass">
         <div>
-          <h1>Good morning, Amara</h1>
-          <p class="sub">Here's how your thread is running today.</p>
+          <h1 id="dashboardGreeting">Good morning</h1>
+          <p class="sub" id="dashboardSub">Loading your workspace…</p>
         </div>
         <div class="topbar-actions">
           <button class="btn btn-ghost btn-sm" onclick="return false;">Export report</button>
@@ -259,23 +259,23 @@
       <div class="stat-row">
         <div class="stat-card card glass">
           <div class="label">Queued this week</div>
-          <div class="value">18</div>
-          <div class="delta">+4 vs last week</div>
+          <div class="value" id="queuedCount">0</div>
+          <div class="delta" id="queueStatDelta">Loading queue…</div>
         </div>
         <div class="stat-card card glass">
           <div class="label">Posted on time</div>
-          <div class="value">99.7%</div>
-          <div class="delta">+0.3%</div>
+          <div class="value" id="completedCount">0</div>
+          <div class="delta" id="completedStatDelta">Synced from your queue</div>
         </div>
         <div class="stat-card card glass">
           <div class="label">Avg. views / status</div>
-          <div class="value">312</div>
-          <div class="delta">+21 vs last week</div>
+          <div class="value">—</div>
+          <div class="delta">Delivery analytics coming soon</div>
         </div>
         <div class="stat-card card glass">
           <div class="label">Connected numbers</div>
-          <div class="value">2</div>
-          <div class="delta">Both active</div>
+          <div class="value" id="connectedCount">0</div>
+          <div class="delta" id="connectedStatDelta">Connect a number to begin</div>
         </div>
       </div>
 
@@ -285,35 +285,8 @@
             <h2>Up next in the queue</h2>
             <button class="btn btn-ghost btn-sm" onclick="goTo('queue')">Open scheduler</button>
           </div>
-          <div class="queue-list">
-            <div class="queue-row">
-              <span class="drag">⠿</span>
-              <div class="queue-thumb"></div>
-              <div class="queue-info"><b>Happy hour countdown</b><span>Video · Café Loop</span></div>
-              <span class="queue-time">Today, 5:45 PM</span>
-              <span class="status-badge scheduled">Scheduled</span>
-            </div>
-            <div class="queue-row">
-              <span class="drag">⠿</span>
-              <div class="queue-thumb"></div>
-              <div class="queue-info"><b>Closing hours notice</b><span>Text · Café Loop</span></div>
-              <span class="queue-time">Today, 9:00 PM</span>
-              <span class="status-badge scheduled">Scheduled</span>
-            </div>
-            <div class="queue-row">
-              <span class="drag">⠿</span>
-              <div class="queue-thumb"></div>
-              <div class="queue-info"><b>Weekend market pop-up</b><span>Photo · Café Loop</span></div>
-              <span class="queue-time">Sat, 9:00 AM</span>
-              <span class="status-badge draft">Draft</span>
-            </div>
-            <div class="queue-row">
-              <span class="drag">⠿</span>
-              <div class="queue-thumb"></div>
-              <div class="queue-info"><b>New pastry teaser</b><span>Photo · Café Loop</span></div>
-              <span class="queue-time">Sun, 11:00 AM</span>
-              <span class="status-badge draft">Draft</span>
-            </div>
+          <div class="queue-list" id="dashboardQueueList">
+            <div class="empty-state">Loading your queue…</div>
           </div>
         </div>
 
@@ -321,21 +294,8 @@
           <div class="panel-head">
             <h2>Recent activity</h2>
           </div>
-          <div class="feed-item">
-            <div class="feed-dot"></div>
-            <div><p>Lunch special reminder posted</p><span>Today, 12:30 PM · 41 views</span></div>
-          </div>
-          <div class="feed-item">
-            <div class="feed-dot"></div>
-            <div><p>Morning menu posted</p><span>Today, 7:00 AM · 24 views</span></div>
-          </div>
-          <div class="feed-item">
-            <div class="feed-dot"></div>
-            <div><p>4 statuses added to next week's queue</p><span>Yesterday, 6:12 PM</span></div>
-          </div>
-          <div class="feed-item">
-            <div class="feed-dot"></div>
-            <div><p>Second number connected — Meridian Goods</p><span>Yesterday, 2:04 PM</span></div>
+          <div id="recentActivity">
+            <div class="empty-state">No activity yet.</div>
           </div>
         </div>
       </div>
@@ -367,7 +327,7 @@
       </nav>
       <div class="side-foot">
         <div class="avatar"></div>
-        <div><b>Amara Chen</b><span>Café Loop · Owner</span></div>
+        <div><b id="queueUserName">Your account</b><span id="queueWorkspaceName">Your workspace</span></div>
       </div>
     </aside>
 
@@ -375,33 +335,40 @@
       <div class="topbar glass">
         <div>
           <h1>Queue &amp; scheduler</h1>
-          <p class="sub">18 statuses queued across the next 7 days.</p>
+          <p class="sub" id="queueSummary">Loading your queue…</p>
         </div>
         <div class="topbar-actions">
-          <button class="btn btn-ghost btn-sm" onclick="return false;">Bulk upload</button>
-          <button class="btn btn-primary btn-sm" onclick="return false;">+ New status</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('caption').focus()">New status</button>
         </div>
       </div>
 
-      <div class="upload-drop glass">
-        <b>Drop photos, video, or text files to add to the queue</b>
-        <p>Knot will space them across your posting windows automatically.</p>
-        <button class="btn btn-primary btn-sm" onclick="return false;">Choose files</button>
-      </div>
+      <form class="upload-drop glass" id="newQueueForm">
+        <b>Add a status to your private queue</b>
+        <p>Media is stored by your Cloudinary workflow; Knot stores the URL and schedule.</p>
+        <div class="queue-form-grid">
+          <label>
+            Caption
+            <textarea id="caption" name="caption" rows="2" maxlength="4096"
+              placeholder="What should your status say?"></textarea>
+          </label>
+          <label>
+            Cloudinary URL
+            <input name="cloudinary_url" type="url" placeholder="https://res.cloudinary.com/…">
+          </label>
+          <label>
+            Schedule
+            <input name="scheduled_for" type="datetime-local">
+          </label>
+          <button class="btn btn-primary btn-sm" type="submit">Add to queue</button>
+        </div>
+        <span class="form-message" role="status"></span>
+      </form>
 
-      <div class="day-strip">
-        <div class="day-chip glass active"><div class="d">TODAY</div><div class="n">14</div><div class="count">2 queued</div></div>
-        <div class="day-chip glass"><div class="d">THU</div><div class="n">15</div><div class="count">3 queued</div></div>
-        <div class="day-chip glass"><div class="d">FRI</div><div class="n">16</div><div class="count">2 queued</div></div>
-        <div class="day-chip glass"><div class="d">SAT</div><div class="n">17</div><div class="count">4 queued</div></div>
-        <div class="day-chip glass"><div class="d">SUN</div><div class="n">18</div><div class="count">3 queued</div></div>
-        <div class="day-chip glass"><div class="d">MON</div><div class="n">19</div><div class="count">1 queued</div></div>
-        <div class="day-chip glass"><div class="d">TUE</div><div class="n">20</div><div class="count">3 queued</div></div>
-      </div>
+      <div class="day-strip"></div>
 
       <div class="panel card glass">
         <div class="panel-head">
-          <h2>Today, Wed 14</h2>
+          <h2 id="queueDayTitle">Today’s queue</h2>
           <div class="filter-tabs">
             <span class="filter-tab active">All</span>
             <span class="filter-tab">Scheduled</span>
@@ -409,35 +376,8 @@
             <span class="filter-tab">Posted</span>
           </div>
         </div>
-        <div class="queue-list">
-          <div class="queue-row">
-            <span class="drag">⠿</span>
-            <div class="queue-thumb"></div>
-            <div class="queue-info"><b>Morning menu — Café Loop</b><span>Photo · posted 7:00 AM</span></div>
-            <span class="queue-time">7:00 AM</span>
-            <span class="status-badge posted">Posted</span>
-          </div>
-          <div class="queue-row">
-            <span class="drag">⠿</span>
-            <div class="queue-thumb"></div>
-            <div class="queue-info"><b>Lunch special reminder</b><span>Text · posted 12:30 PM</span></div>
-            <span class="queue-time">12:30 PM</span>
-            <span class="status-badge posted">Posted</span>
-          </div>
-          <div class="queue-row">
-            <span class="drag">⠿</span>
-            <div class="queue-thumb"></div>
-            <div class="queue-info"><b>Happy hour countdown</b><span>Video · 00:18</span></div>
-            <span class="queue-time">5:45 PM</span>
-            <span class="status-badge scheduled">Scheduled</span>
-          </div>
-          <div class="queue-row">
-            <span class="drag">⠿</span>
-            <div class="queue-thumb"></div>
-            <div class="queue-info"><b>Closing hours notice</b><span>Text</span></div>
-            <span class="queue-time">9:00 PM</span>
-            <span class="status-badge scheduled">Scheduled</span>
-          </div>
+        <div class="queue-list" id="queueListDynamic">
+          <div class="empty-state">Loading your queue…</div>
         </div>
       </div>
     </main>
@@ -468,7 +408,7 @@
       </nav>
       <div class="side-foot">
         <div class="avatar"></div>
-        <div><b>Amara Chen</b><span>Super admin</span></div>
+        <div><b id="adminUserName">Administrator</b><span>Server-authorized admin</span></div>
       </div>
     </aside>
 
@@ -486,23 +426,23 @@
       <div class="admin-metrics">
         <div class="stat-card card glass">
           <div class="label">Active workspaces</div>
-          <div class="value">1,204</div>
-          <div class="delta">+38 this week</div>
+          <div class="value" id="adminWorkspaceCount">0</div>
+          <div class="delta">Visible through admin RLS</div>
         </div>
         <div class="stat-card card glass">
-          <div class="label">Statuses posted today</div>
-          <div class="value">6,842</div>
-          <div class="delta">+5.1%</div>
+          <div class="label">Registered users</div>
+          <div class="value" id="adminUserCount">0</div>
+          <div class="delta">Auth-linked profiles</div>
         </div>
         <div class="stat-card card glass">
-          <div class="label">Delivery success rate</div>
-          <div class="value">99.4%</div>
-          <div class="delta">+0.1%</div>
+          <div class="label">Queue items</div>
+          <div class="value" id="adminQueueCount">0</div>
+          <div class="delta">All workspaces</div>
         </div>
         <div class="stat-card card glass">
-          <div class="label">Open support tickets</div>
-          <div class="value">7</div>
-          <div class="delta">-3 vs yesterday</div>
+          <div class="label">Admin accounts</div>
+          <div class="value" id="adminAdminCount">0</div>
+          <div class="delta">app_metadata.role = admin</div>
         </div>
       </div>
 
@@ -516,52 +456,21 @@
             <thead>
               <tr><th>Workspace</th><th>Plan</th><th>Queued</th><th>Status</th></tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><div class="user-cell"><div class="user-avatar"></div><div><b>Café Loop</b><span>Amara Chen</span></div></div></td>
-                <td><span class="plan-tag pro">Pro</span></td>
-                <td>18</td>
-                <td><span class="status-badge scheduled">Active</span></td>
-              </tr>
-              <tr>
-                <td><div class="user-cell"><div class="user-avatar"></div><div><b>Threadworks</b><span>Dele Osei</span></div></div></td>
-                <td><span class="plan-tag">Free</span></td>
-                <td>4</td>
-                <td><span class="status-badge scheduled">Active</span></td>
-              </tr>
-              <tr>
-                <td><div class="user-cell"><div class="user-avatar"></div><div><b>Meridian Goods</b><span>Priya Nair</span></div></div></td>
-                <td><span class="plan-tag pro">Pro</span></td>
-                <td>27</td>
-                <td><span class="status-badge scheduled">Active</span></td>
-              </tr>
-              <tr>
-                <td><div class="user-cell"><div class="user-avatar"></div><div><b>Pack &amp; Post</b><span>Owen Marsh</span></div></div></td>
-                <td><span class="plan-tag">Free</span></td>
-                <td>0</td>
-                <td><span class="status-badge draft">Idle</span></td>
-              </tr>
+            <tbody id="adminWorkspaceBody">
+              <tr><td colspan="4">Loading workspaces…</td></tr>
             </tbody>
           </table>
         </div>
 
-        <div class="panel card glass">
-          <div class="panel-head"><h2>System status</h2></div>
-          <div class="system-row">
-            <span class="name">WhatsApp Business API</span>
-            <span class="status-badge online">Online</span>
+        <div class="panel card glass pricing-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Naira pricing</h2>
+              <p class="sub">Admin-only editable plan prices. Payment gateways are not used for admin accounts.</p>
+            </div>
           </div>
-          <div class="system-row">
-            <span class="name">Media processing queue</span>
-            <span class="status-badge online">Online</span>
-          </div>
-          <div class="system-row">
-            <span class="name">Scheduler workers</span>
-            <span class="status-badge online">Online</span>
-          </div>
-          <div class="system-row">
-            <span class="name">Delivery webhooks</span>
-            <span class="status-badge warn">Degraded</span>
+          <div id="pricingPlanList">
+            <div class="empty-state">Loading pricing…</div>
           </div>
         </div>
       </div>
@@ -571,6 +480,7 @@
 
 <script src="script.js"></script>
 <script type="module" src="auth.js"></script>
+<script type="module" src="knot-data.js"></script>
 <script type="module" src="admin-guard.js"></script>
 </body>
 </html>

@@ -29,8 +29,7 @@ let signOutButton;
 function isAdminSession(session) {
   return Boolean(
     session?.user &&
-    (session.user.app_metadata?.role === ADMIN_ROLE ||
-      session.user.app_metadata?.is_admin === true)
+    session.user.app_metadata?.role === ADMIN_ROLE
   );
 }
 
