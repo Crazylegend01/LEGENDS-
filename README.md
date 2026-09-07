@@ -2,8 +2,9 @@
 
 Knot is a glassmorphism WhatsApp status scheduler UI backed by Supabase
 Auth, PostgreSQL, and Row Level Security. The landing-page visual design is
-preserved, while the authenticated dashboard, queue, workspace, and admin
-views now read from the database instead of demo-only rows.
+preserved, while the authenticated dashboard and queue read from the database
+instead of demo-only rows. Admin access lives on a separate `admin.html` page
+and is not linked from the public app.
 
 ## Supabase setup
 
@@ -26,6 +27,14 @@ views now read from the database instead of demo-only rows.
 5. Serve this folder from a web server. Opening `index.html` with `file://` can
    prevent browser module imports from working.
 
+## Separate admin page
+
+Open `/admin.html` directly when you need the private admin surface. It asks
+for the administrator's Supabase email and password, then checks the trusted
+`app_metadata.role` claim before loading any platform data. There is no
+hardcoded admin email or client-side admin password. The public app does not
+link to this page.
+
 The `handle_new_user` trigger creates a profile, an individual workspace, and
 an owner membership for every new account. The client never supplies a
 `user_id` from another account. RLS policies use `auth.uid()` and the trusted
@@ -46,7 +55,9 @@ the browser-side admin flag is only a UX optimization.
 ## Files
 
 - `auth.js` — public sign-up, sign-in, password reset, and protected navigation.
-- `admin-guard.js` — admin session gate using `app_metadata.role`.
+- `admin.html` — unlinked admin login and private admin surface.
+- `admin-page.js` — Supabase Auth admin check, workspace metrics, and editable
+  Naira pricing.
 - `knot-data.js` — user-scoped workspace/queue rendering, queue creation, and
   admin pricing/workspace data access.
 - `supabase/migrations/20260905_knot_multi_user.sql` — schema, signup trigger,

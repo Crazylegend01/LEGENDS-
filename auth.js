@@ -13,7 +13,7 @@
 
 import { supabase } from "./supabase-client.js";
 
-const PROTECTED_VIEWS = new Set(["dashboard", "queue", "admin"]);
+const PROTECTED_VIEWS = new Set(["dashboard", "queue"]);
 
 let nativeGoTo;
 let session = null;

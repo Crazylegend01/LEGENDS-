@@ -168,7 +168,6 @@ function renderUserShell() {
   setText("#userRole", state.isAdmin ? "Administrator" : "Owner");
   setText("#queueUserName", name);
   setText("#queueWorkspaceName", workspace);
-  setText("#adminUserName", name);
   setText("#queuedCount", String(pending));
   setText("#completedCount", String(completed));
   setText("#connectedCount", String(sessionCount));
@@ -300,7 +299,6 @@ async function refresh() {
   try {
     await loadUserData();
     renderUserShell();
-    await loadAdminData();
     setText("#dataStatus", "");
   } catch (error) {
     console.error("Knot data load failed:", error);
@@ -338,30 +336,15 @@ async function addQueueItem(form) {
   await refresh();
 }
 
-async function savePricingPlan(form) {
-  if (!state.isAdmin) throw new Error("Only administrators can edit pricing.");
-  const planId = form.dataset.pricingPlan;
-  const amount = Number(new FormData(form).get("price_amount"));
-  if (!Number.isFinite(amount) || amount < 0) throw new Error("Enter a valid non-negative Naira price.");
-
-  const { error } = await supabase
-    .from("pricing_plans")
-    .update({ price_amount: amount, currency: "NGN" })
-    .eq("id", planId);
-  if (error) throw error;
-}
-
 document.addEventListener("submit", async (event) => {
   const queueForm = event.target.closest("#newQueueForm");
-  const pricingForm = event.target.closest("[data-pricing-plan]");
-  if (!queueForm && !pricingForm) return;
+  if (!queueForm) return;
   event.preventDefault();
-  const form = queueForm || pricingForm;
-  const message = form.querySelector(".form-message, .pricing-message");
+  const form = queueForm;
+  const message = form.querySelector(".form-message");
   if (message) message.textContent = "Saving…";
   try {
-    if (queueForm) await addQueueItem(form);
-    else await savePricingPlan(form);
+    await addQueueItem(form);
     if (message) message.textContent = "Saved.";
   } catch (error) {
     if (message) message.textContent = error.message || "Unable to save.";
