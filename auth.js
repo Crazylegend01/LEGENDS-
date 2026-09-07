@@ -30,6 +30,10 @@ let message;
 let mode = "signin";
 let pendingView = "dashboard";
 
+function authRedirectUrl() {
+  return `${window.location.origin}${window.location.pathname}`;
+}
+
 function injectAuthStyles() {
   const style = document.createElement("style");
   style.dataset.knotAuth = "true";
@@ -263,7 +267,7 @@ async function submitAuth(event) {
     const { data, error } = await supabase.auth.signUp({
       email: emailInput.value.trim(),
       password: passwordInput.value,
-      options: { emailRedirectTo: window.location.href },
+      options: { emailRedirectTo: authRedirectUrl() },
     });
 
     if (error) {
@@ -307,7 +311,7 @@ async function sendResetEmail() {
 
   resetButton.disabled = true;
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.href,
+    redirectTo: authRedirectUrl(),
   });
   setMessage(
     error ? error.message : "If that account exists, a password reset email is on its way.",
