@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Knot — Admin access</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+  <div class="field"></div>
+
+  <main class="admin-wrap">
+    <a class="logo admin-logo" href="index.html">
+      <svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>
+      Knot
+    </a>
+
+    <section class="admin-login-card glass-strong" id="adminLogin">
+      <span class="pill"><span class="pill-dot"></span> Private workspace</span>
+      <h1>Admin access</h1>
+      <p>Sign in with a Supabase account whose trusted <code>app_metadata.role</code> is <code>admin</code>.</p>
+      <form id="adminLoginForm">
+        <label for="adminEmail">Email</label>
+        <input id="adminEmail" type="email" autocomplete="username" required>
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" minlength="8" required>
+        <p class="admin-form-message" id="adminLoginMessage" role="alert"></p>
+        <button class="btn btn-primary" type="submit">Sign in securely</button>
+      </form>
+      <a class="admin-back-link" href="index.html">Back to Knot</a>
+    </section>
+
+    <section class="admin-panel" id="adminPanel" hidden>
+      <div class="topbar glass">
+        <div>
+          <h1>Admin panel</h1>
+          <p class="sub">Private platform view. Data is protected by Supabase RLS.</p>
+        </div>
+        <div class="topbar-actions">
+          <span class="pill"><span class="pill-dot"></span><span id="adminIdentity">Authorized</span></span>
+          <button class="btn btn-ghost btn-sm" id="adminSignOut" type="button">Sign out</button>
+        </div>
+      </div>
+
+      <div class="admin-metrics">
+        <div class="stat-card card glass">
+          <div class="label">Active workspaces</div>
+          <div class="value" id="adminWorkspaceCount">0</div>
+          <div class="delta">Visible through admin RLS</div>
+        </div>
+        <div class="stat-card card glass">
+          <div class="label">Registered users</div>
+          <div class="value" id="adminUserCount">0</div>
+          <div class="delta">Auth-linked profiles</div>
+        </div>
+        <div class="stat-card card glass">
+          <div class="label">Queue items</div>
+          <div class="value" id="adminQueueCount">0</div>
+          <div class="delta">All workspaces</div>
+        </div>
+        <div class="stat-card card glass">
+          <div class="label">Admin accounts</div>
+          <div class="value" id="adminAdminCount">0</div>
+          <div class="delta">Trusted role claims</div>
+        </div>
+      </div>
+
+      <div class="panel-grid">
+        <div class="panel card glass">
+          <div class="panel-head"><h2>Recent workspaces</h2></div>
+          <table class="table">
+            <thead>
+              <tr><th>Workspace</th><th>Plan</th><th>Queued</th><th>Status</th></tr>
+            </thead>
+            <tbody id="adminWorkspaceBody">
+              <tr><td colspan="4">Loading workspaces…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel card glass pricing-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Naira pricing</h2>
+              <p class="sub">Only authorized admins can edit these values.</p>
+            </div>
+          </div>
+          <div id="pricingPlanList">
+            <div class="empty-state">Loading pricing…</div>
+          </div>
+        </div>
+      </div>
+      <p class="admin-form-message" id="adminDataMessage" role="status"></p>
+    </section>
+  </main>
+
+  <script type="module" src="admin-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knot — Automated WhatsApp Status Scheduling</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Ambient background field the glass panels sit on -->
+<div class="field"></div>
+
+<!-- Shared SVG defs: gradient used by every infinity mark -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="knotGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     LOADER
+     ============================================================ -->
+<div class="loader-screen" id="loaderScreen">
+  <svg class="loader-mark" viewBox="0 0 140 84" xmlns="http://www.w3.org/2000/svg">
+    <path class="loader-path" d="M35,42 C35,25 49,15 62,25 C71,32 71,52 62,59 C49,69 35,59 35,42 C35,25 49,15 62,25 C74,34 87,34 99,25 C112,15 126,25 126,42 C126,59 112,69 99,59 C87,50 87,34 99,25"/>
+  </svg>
+  <span class="loader-label">LOADING YOUR THREAD…</span>
+</div>
+
+<!-- ============================================================
+     VIEW 1 — LANDING PAGE
+     ============================================================ -->
+<section class="view active" id="view-landing">
+
+  <nav class="topnav glass">
+    <a class="logo" href="#" onclick="return false;">
+      <svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>
+      Knot
+    </a>
+    <div class="topnav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="topnav-actions">
+      <a class="btn btn-ghost btn-sm" href="#" onclick="return false;">Log in</a>
+      <a class="btn btn-primary btn-sm" href="#" onclick="goTo('dashboard')">Start free</a>
+    </div>
+  </nav>
+
+  <header class="hero container">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="pill hero-eyebrow-pill"><span class="pill-dot"></span> Now syncing with WhatsApp Business</span>
+        <h1>Your status updates, tied together and posted on time.</h1>
+        <p class="lede">Queue a week of WhatsApp statuses in one sitting. Knot threads them into a schedule and posts each one the moment it's due — no reminders, no manual uploads.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#" onclick="goTo('dashboard')">Start free</a>
+          <a class="btn btn-ghost" href="#" onclick="goTo('queue')">See the scheduler</a>
+        </div>
+        <p class="hero-note">Free for your first 10 scheduled statuses. No card required.</p>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>48k+</b><span>statuses posted</span></div>
+          <div class="hero-stat"><b>99.7%</b><span>on-time delivery</span></div>
+          <div class="hero-stat"><b>3.2 min</b><span>avg. setup time</span></div>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone glass-strong">
+          <div class="phone-notch"></div>
+          <div class="phone-header">
+            <div class="phone-avatar"></div>
+            <div>
+              <b>Today's thread</b>
+              <span>4 statuses queued</span>
+            </div>
+          </div>
+          <div class="status-thread">
+            <div class="status-item done">
+              <div class="time">7:00 AM · Posted</div>
+              <div class="title">Morning menu — Café Loop</div>
+              <div class="sub">Photo · 24 views</div>
+            </div>
+            <div class="status-item done">
+              <div class="time">12:30 PM · Posted</div>
+              <div class="title">Lunch special reminder</div>
+              <div class="sub">Text · 41 views</div>
+            </div>
+            <div class="status-item">
+              <div class="time">5:45 PM · Posting in 2h</div>
+              <div class="title">Happy hour countdown</div>
+              <div class="sub">Video · scheduled</div>
+            </div>
+            <div class="status-item">
+              <div class="time">9:00 PM · Queued</div>
+              <div class="title">Closing hours notice</div>
+              <div class="sub">Text · scheduled</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="logo-strip">
+      <span>CAFÉ LOOP</span><span>THREADWORKS</span><span>MERIDIAN GOODS</span><span>PACK &amp; POST</span><span>NINE YARDS STUDIO</span>
+    </div>
+  </header>
+
+  <section class="section" id="how">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">How it works</span>
+        <h2>Three steps, one continuous thread.</h2>
+        <p>Connect your number once. Everything after that runs on the schedule you set.</p>
+      </div>
+      <div class="thread-steps">
+        <div class="thread-step">
+          <div class="knot-dot glass-strong">
+            <svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>
+          </div>
+          <h3>Connect your number</h3>
+          <p>Link WhatsApp Business in under a minute. Knot never stores your messages, only your status queue.</p>
+        </div>
+        <div class="thread-step">
+          <div class="knot-dot glass-strong">
+            <svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>
+          </div>
+          <h3>Upload and order your statuses</h3>
+          <p>Drop in photos, video, or text updates and drag them into the order you want them to appear.</p>
+        </div>
+        <div class="thread-step">
+          <div class="knot-dot glass-strong">
+            <svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>
+          </div>
+          <h3>Set it and step away</h3>
+          <p>Knot posts each status at its scheduled time and logs delivery, so you can check in whenever you like.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Built for the way you actually post</span>
+        <h2>Everything a status calendar needs.</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card card glass">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>
+          <h3>Visual queue calendar</h3>
+          <p>See every status laid out by day, with drag-to-reorder and one-click rescheduling.</p>
+        </div>
+        <div class="feature-card card glass">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div>
+          <h3>Bulk upload</h3>
+          <p>Drop in a week's worth of photos, clips, and captions at once — Knot spaces them out for you.</p>
+        </div>
+        <div class="feature-card card glass">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 1016 0 8 8 0 00-16 0zM12 8v4l3 2"/></svg></div>
+          <h3>Time-zone aware posting</h3>
+          <p>Set a posting window once and Knot handles daylight saving and multi-market accounts for you.</p>
+        </div>
+        <div class="feature-card card glass">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l6 6L21 6"/></svg></div>
+          <h3>Delivery confirmation</h3>
+          <p>Every post logs a timestamp and view count, so a missed status never goes unnoticed.</p>
+        </div>
+        <div class="feature-card card glass">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+          <h3>Team roles</h3>
+          <p>Invite teammates to upload and draft, while approvals stay with an owner or admin.</p>
+        </div>
+        <div class="feature-card card glass">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/></svg></div>
+          <h3>Multiple numbers</h3>
+          <p>Run separate threads for separate locations or brands from a single Knot account.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="cta-band glass-strong">
+        <h2>Stop opening WhatsApp five times a day.</h2>
+        <p>Set this week's statuses once. Knot keeps the thread running.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#" onclick="goTo('dashboard')">Start free</a>
+          <a class="btn btn-ghost" href="#" onclick="return false;">Talk to us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer container">
+    <a class="logo" href="#" onclick="return false;">
+      <svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>
+      Knot
+    </a>
+    <div class="footer-links">
+      <a href="#" onclick="return false;">Privacy</a>
+      <a href="#" onclick="return false;">Terms</a>
+      <a href="#" onclick="return false;">Status</a>
+      <a href="#" onclick="return false;">Contact</a>
+    </div>
+    <p>© 2026 Knot. All threads accounted for.</p>
+  </footer>
+</section>
+
+<!-- ============================================================
+     VIEW 2 — USER DASHBOARD
+     ============================================================ -->
+<section class="view" id="view-dashboard">
+  <div class="mobile-topbar glass-strong">
+    <a class="logo" href="#" onclick="return false;"><svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>Knot</a>
+    <button class="btn btn-ghost btn-sm" onclick="toggleSidebar()">Menu</button>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar glass-strong" id="sidebarApp">
+      <div class="sidebar-logo">
+        <a class="logo" href="#" onclick="return false;"><svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>Knot</a>
+      </div>
+        <a class="side-link active" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Overview</a>
+        <a class="side-link" href="#" onclick="goTo('queue')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Queue &amp; scheduler</a>
+        <a class="side-link" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="7" r="4"/></svg>Audience</a>
+        <a class="side-link" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-6 4 4 4-8"/></svg>Insights</a>
+        <a class="side-link" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.6 1z"/></svg>Settings</a>
+      </nav>
+      <div class="side-foot">
+        <div class="avatar"></div>
+        <div>
+          <b id="userName">Your account</b>
+          <span id="userRole">Owner</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-col">
+      <div class="topbar glass">
+        <div>
+          <h1 id="dashboardGreeting">Good morning</h1>
+          <p class="sub" id="dashboardSub">Loading your workspace…</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm" onclick="return false;">Export report</button>
+          <button class="btn btn-primary btn-sm" onclick="goTo('queue')">+ New status</button>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card card glass">
+          <div class="label">Queued this week</div>
+          <div class="value" id="queuedCount">0</div>
+          <div class="delta" id="queueStatDelta">Loading queue…</div>
+        </div>
+        <div class="stat-card card glass">
+          <div class="label">Posted on time</div>
+          <div class="value" id="completedCount">0</div>
+          <div class="delta" id="completedStatDelta">Synced from your queue</div>
+        </div>
+        <div class="stat-card card glass">
+          <div class="label">Avg. views / status</div>
+          <div class="value">—</div>
+          <div class="delta">Delivery analytics coming soon</div>
+        </div>
+        <div class="stat-card card glass">
+          <div class="label">Connected numbers</div>
+          <div class="value" id="connectedCount">0</div>
+          <div class="delta" id="connectedStatDelta">Connect a number to begin</div>
+        </div>
+      </div>
+
+      <section class="whatsapp-link-panel card glass-strong" id="whatsappLinkPanel" aria-labelledby="whatsappLinkTitle">
+        <div class="whatsapp-link-head">
+          <div>
+            <div class="whatsapp-kicker"><span class="whatsapp-live-dot"></span> WhatsApp connection</div>
+            <h2 id="whatsappLinkTitle">Link WhatsApp</h2>
+            <p class="sub">Connect your number once. Knot keeps the secure session available after restarts.</p>
+          </div>
+          <span class="status-badge draft" id="whatsappStatusBadge">Not linked</span>
+        </div>
+
+        <div class="whatsapp-link-grid">
+          <div class="whatsapp-link-copy">
+            <p id="whatsappLinkMessage">Choose a QR code or use a pairing code from your WhatsApp app.</p>
+            <div class="whatsapp-link-actions">
+              <button class="btn btn-primary btn-sm" id="whatsappStartQr" type="button">Link with QR code</button>
+              <button class="btn btn-ghost btn-sm" id="whatsappShowPairing" type="button">Use pairing code</button>
+            </div>
+            <form class="whatsapp-pairing-form" id="whatsappPairingForm" hidden>
+              <label for="whatsappPhone">Phone number with country code</label>
+              <div class="whatsapp-pairing-row">
+                <input id="whatsappPhone" name="phoneNumber" type="tel" inputmode="numeric"
+                  placeholder="2348012345678" autocomplete="tel">
+                <button class="btn btn-primary btn-sm" type="submit">Get code</button>
+              </div>
+              <span class="form-message" id="whatsappPairingMessage" role="status"></span>
+            </form>
+            <button class="btn btn-ghost btn-sm whatsapp-disconnect" id="whatsappDisconnect" type="button" hidden>
+              Unlink WhatsApp
+            </button>
+          </div>
+
+          <div class="whatsapp-connect-stage glass" id="whatsappConnectStage" aria-live="polite">
+            <div class="whatsapp-stage-idle" id="whatsappStageIdle">
+              <svg class="whatsapp-stage-mark" viewBox="0 0 140 84" aria-hidden="true">
+                <path d="M35,42 C35,25 49,15 62,25 C71,32 71,52 62,59 C49,69 35,59 35,42 C35,25 49,15 62,25 C74,34 87,34 99,25 C112,15 126,25 126,42 C126,59 112,69 99,59 C87,50 87,34 99,25"/>
+              </svg>
+              <span>Ready when you are</span>
+            </div>
+            <div class="whatsapp-stage-loading" id="whatsappStageLoading" hidden>
+              <svg class="whatsapp-stage-mark is-animated" viewBox="0 0 140 84" aria-hidden="true">
+                <path d="M35,42 C35,25 49,15 62,25 C71,32 71,52 62,59 C49,69 35,59 35,42 C35,25 49,15 62,25 C74,34 87,34 99,25 C112,15 126,25 126,42 C126,59 112,69 99,59 C87,50 87,34 99,25"/>
+              </svg>
+              <b>Opening secure connection…</b>
+              <span>Keep this window open while WhatsApp prepares the link.</span>
+            </div>
+            <div class="whatsapp-stage-qr" id="whatsappStageQr" hidden>
+              <img id="whatsappQrImage" alt="WhatsApp connection QR code">
+              <b>Scan this code with WhatsApp</b>
+              <span>Open WhatsApp → Settings → Linked devices → Link a device.</span>
+            </div>
+            <div class="whatsapp-stage-pairing" id="whatsappStagePairing" hidden>
+              <span>Your pairing code</span>
+              <strong id="whatsappPairingCode">——</strong>
+              <small>In WhatsApp, open Linked devices and choose “Link with phone number instead”.</small>
+            </div>
+            <div class="whatsapp-stage-connected" id="whatsappStageConnected" hidden>
+              <span class="whatsapp-check">✓</span>
+              <b>WhatsApp is linked</b>
+              <span id="whatsappConnectedNumber">Your number is ready for scheduled statuses.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="panel-grid">
+        <div class="panel card glass">
+          <div class="panel-head">
+            <h2>Up next in the queue</h2>
+            <button class="btn btn-ghost btn-sm" onclick="goTo('queue')">Open scheduler</button>
+          </div>
+          <div class="queue-list" id="dashboardQueueList">
+            <div class="empty-state">Loading your queue…</div>
+          </div>
+        </div>
+
+        <div class="panel card glass">
+          <div class="panel-head">
+            <h2>Recent activity</h2>
+          </div>
+          <div id="recentActivity">
+            <div class="empty-state">No activity yet.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW 3 — QUEUE & SCHEDULER
+     ============================================================ -->
+<section class="view" id="view-queue">
+  <div class="mobile-topbar glass-strong">
+    <a class="logo" href="#" onclick="return false;"><svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>Knot</a>
+    <button class="btn btn-ghost btn-sm" onclick="toggleSidebar()">Menu</button>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar glass-strong">
+      <div class="sidebar-logo">
+        <a class="logo" href="#" onclick="return false;"><svg viewBox="0 0 60 36"><path class="mark-path" d="M15,18 C15,9 23,4 30,10 C34,14 34,22 30,26 C23,32 15,27 15,18 C15,9 23,4 30,10 C36,15 41,15 47,10 C54,4 61,9 61,18 C61,27 54,32 47,26 C41,21 41,15 47,10"/></svg>Knot</a>
+      </div>
+      <nav class="side-nav">
+        <a class="side-link" href="#" onclick="goTo('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Overview</a>
+        <a class="side-link active" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Queue &amp; scheduler</a>
+        <a class="side-link" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="7" r="4"/></svg>Audience</a>
+        <a class="side-link" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-6 4 4 4-8"/></svg>Insights</a>
+        <a class="side-link" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.6 1z"/></svg>Settings</a>
+      </nav>
+      <div class="side-foot">
+        <div class="avatar"></div>
+        <div><b id="queueUserName">Your account</b><span id="queueWorkspaceName">Your workspace</span></div>
+      </div>
+    </aside>
+
+    <main class="main-col">
+      <div class="topbar glass">
+        <div>
+          <h1>Queue &amp; scheduler</h1>
+          <p class="sub" id="queueSummary">Loading your queue…</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('caption').focus()">New status</button>
+        </div>
+      </div>
+
+      <form class="upload-drop glass" id="newQueueForm">
+        <b>Add a status to your private queue</b>
+        <p>Media is stored by your Cloudinary workflow; Knot stores the URL and schedule.</p>
+        <div class="queue-form-grid">
+          <label>
+            Caption
+            <textarea id="caption" name="caption" rows="2" maxlength="4096"
+              placeholder="What should your status say?"></textarea>
+          </label>
+          <label>
+            Cloudinary URL
+            <input name="cloudinary_url" type="url" placeholder="https://res.cloudinary.com/…">
+          </label>
+          <label>
+            Schedule
+            <input name="scheduled_for" type="datetime-local">
+          </label>
+          <button class="btn btn-primary btn-sm" type="submit">Add to queue</button>
+        </div>
+        <span class="form-message" role="status"></span>
+      </form>
+
+      <div class="day-strip"></div>
+
+      <div class="panel card glass">
+        <div class="panel-head">
+          <h2 id="queueDayTitle">Today’s queue</h2>
+          <div class="filter-tabs">
+            <span class="filter-tab active">All</span>
+            <span class="filter-tab">Scheduled</span>
+            <span class="filter-tab">Drafts</span>
+            <span class="filter-tab">Posted</span>
+          </div>
+        </div>
+        <div class="queue-list" id="queueListDynamic">
+          <div class="empty-state">Loading your queue…</div>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW 4 — ADMIN PANEL SHELL
+     ============================================================ -->
+<!-- Legacy admin markup removed from the public app.
+      <nav class="side-nav">
+        <a class="side-link" href="#" onclick="return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.6 1z"/></svg>Platform settings</a>
+      </nav>
+      <div class="side-foot">
+        <div class="avatar"></div>
+        <div><b id="adminUserName">Administrator</b><span>Server-authorized admin</span></div>
+      </div>
+    </aside>
+-->
+
+
+<script src="script.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="knot-data.js"></script>
+<script type="module" src="whatsapp-link.js"></script>
+</body>
+</html>
