@@ -13,7 +13,7 @@
 
 import { supabase } from "./supabase-client.js";
 
-const PROTECTED_VIEWS = new Set(["dashboard", "queue", "admin"]);
+const PROTECTED_VIEWS = new Set(["dashboard", "queue"]);
 
 let nativeGoTo;
 let session = null;
@@ -29,6 +29,10 @@ let switchButton;
 let message;
 let mode = "signin";
 let pendingView = "dashboard";
+
+function authRedirectUrl() {
+  return `${window.location.origin}${window.location.pathname}`;
+}
 
 function injectAuthStyles() {
   const style = document.createElement("style");
@@ -259,38 +263,43 @@ async function submitAuth(event) {
   submitButton.disabled = true;
   submitButton.textContent = mode === "signup" ? "Creating account…" : "Signing in…";
 
-  if (mode === "signup") {
-    const { data, error } = await supabase.auth.signUp({
-      email: emailInput.value.trim(),
-      password: passwordInput.value,
-      options: { emailRedirectTo: window.location.href },
-    });
+  try {
+    if (mode === "signup") {
+      const { data, error } = await supabase.auth.signUp({
+        email: emailInput.value.trim(),
+        password: passwordInput.value,
+        options: { emailRedirectTo: authRedirectUrl() },
+      });
 
-    if (error) {
-      setMessage(error.message || "Unable to create the account.");
-    } else if (!data.session) {
-      setMessage("Account created. Check your email to confirm your account.", true);
-      submitButton.disabled = false;
-      submitButton.textContent = "Create account";
-      return;
+      if (error) {
+        setMessage(error.message || "Unable to create the account.");
+      } else if (!data.session) {
+        setMessage("Account created. Check your email to confirm your account.", true);
+        submitButton.disabled = false;
+        submitButton.textContent = "Create account";
+        return;
+      } else {
+        session = data.session;
+        closeModal();
+        nativeGoTo?.(pendingView);
+      }
     } else {
-      session = data.session;
-      closeModal();
-      nativeGoTo?.(pendingView);
-    }
-  } else {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: emailInput.value.trim(),
-      password: passwordInput.value,
-    });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: emailInput.value.trim(),
+        password: passwordInput.value,
+      });
 
-    if (error || !data.session) {
-      setMessage(error?.message || "Unable to sign in. Check your email and password.");
-    } else {
-      session = data.session;
-      closeModal();
-      nativeGoTo?.(pendingView);
+      if (error || !data.session) {
+        setMessage(error?.message || "Unable to sign in. Check your email and password.");
+      } else {
+        session = data.session;
+        closeModal();
+        nativeGoTo?.(pendingView);
+      }
     }
+  } catch (error) {
+    console.error("Knot authentication request failed:", error);
+    setMessage("Authentication service is unavailable. Check the Supabase project URL in supabase-client.js.");
   }
 
   submitButton.disabled = false;
@@ -307,7 +316,7 @@ async function sendResetEmail() {
 
   resetButton.disabled = true;
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.href,
+    redirectTo: authRedirectUrl(),
   });
   setMessage(
     error ? error.message : "If that account exists, a password reset email is on its way.",
@@ -335,15 +344,12 @@ async function initialize() {
   injectAuthStyles();
   createModal();
 
-  const { data } = await supabase.auth.getSession();
-  session = data.session;
-  supabase.auth.onAuthStateChange((_event, nextSession) => {
-    session = nextSession;
-  });
-
   nativeGoTo = window.goTo;
   if (typeof nativeGoTo !== "function") return;
 
+  // Install the protected navigation even if Supabase is temporarily offline.
+  // Previously, a failed getSession() stopped this file before the login modal
+  // could open, making the app look like its auth buttons were broken.
   window.goTo = function protectedGoTo(name) {
     if (PROTECTED_VIEWS.has(name) && !session) {
       openModal("signin", name);
@@ -353,6 +359,18 @@ async function initialize() {
   };
 
   document.addEventListener("click", interceptLandingAuthLinks, true);
+
+  try {
+    const { data } = await supabase.auth.getSession();
+    session = data.session;
+  } catch (error) {
+    console.error("Knot session check failed:", error);
+    setMessage("Authentication service is unavailable. Check the Supabase project URL in supabase-client.js.");
+  }
+
+  supabase.auth.onAuthStateChange((_event, nextSession) => {
+    session = nextSession;
+  });
 }
 
 window.KnotAuth = {

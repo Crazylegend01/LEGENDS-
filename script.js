@@ -4,7 +4,7 @@
    queue / admin), mobile sidebar toggle, active-state syncing.
    ============================================================ */
 
-const VIEWS = ["landing", "dashboard", "queue", "admin"];
+const VIEWS = ["landing", "dashboard", "queue"];
 
 function goTo(name) {
   if (!VIEWS.includes(name)) return;
