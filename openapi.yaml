@@ -1,0 +1,229 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.2.0
+  description: Knot media queue and WhatsApp broadcaster API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+  - name: media
+  - name: whatsapp
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /media/upload:
+    post:
+      operationId: uploadMedia
+      tags: [media]
+      security: [{ bearerAuth: [] }]
+      summary: Upload and queue an image or video
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/MediaUpload"
+      responses:
+        "201":
+          description: Queued media
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueueItemResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /media/queue:
+    get:
+      operationId: listMediaQueue
+      tags: [media]
+      security: [{ bearerAuth: [] }]
+      summary: List queue items
+      parameters:
+        - in: query
+          name: workspaceId
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Queue items
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/QueueItem" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /media/queue/text:
+    post:
+      operationId: queueText
+      tags: [media]
+      security: [{ bearerAuth: [] }]
+      summary: Queue a text-only status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextQueueRequest"
+      responses:
+        "201":
+          description: Queued text
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueueItemResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /media/queue/{id}:
+    delete:
+      operationId: deleteMediaQueueItem
+      tags: [media]
+      security: [{ bearerAuth: [] }]
+      summary: Delete a queue item
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "204": { description: Deleted }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: Queue item not found
+  /whatsapp/session:
+    get:
+      operationId: getWhatsAppSession
+      tags: [whatsapp]
+      security: [{ bearerAuth: [] }]
+      summary: Read WhatsApp pairing status
+      responses:
+        "200":
+          description: Session status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WhatsAppSession"
+    delete:
+      operationId: deleteWhatsAppSession
+      tags: [whatsapp]
+      security: [{ bearerAuth: [] }]
+      summary: Log out the WhatsApp session
+      responses:
+        "204": { description: Logged out }
+  /whatsapp/session/start:
+    post:
+      operationId: startWhatsAppSession
+      tags: [whatsapp]
+      security: [{ bearerAuth: [] }]
+      summary: Start a WhatsApp session and generate a QR code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [workspaceId]
+              properties:
+                workspaceId: { type: string, format: uuid }
+      responses:
+        "202":
+          description: Session starting
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WhatsAppSession"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string }
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
+    MediaUpload:
+      type: object
+      required: [workspaceId, file]
+      properties:
+        workspaceId: { type: string, format: uuid }
+        file: { type: string, format: binary }
+        caption: { type: string, maxLength: 4096 }
+        scheduledFor: { type: string, format: date-time }
+    TextQueueRequest:
+      type: object
+      required: [workspaceId, caption]
+      properties:
+        workspaceId: { type: string, format: uuid }
+        caption: { type: string, minLength: 1, maxLength: 4096 }
+        scheduledFor: { type: string, format: date-time }
+    QueueItem:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        user_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        cloudinary_url: { type: [string, "null"], format: uri }
+        caption: { type: string }
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+        scheduled_for: { type: [string, "null"], format: date-time }
+        last_error: { type: [string, "null"] }
+    QueueItemResponse:
+      type: object
+      required: [item]
+      properties:
+        item: { $ref: "#/components/schemas/QueueItem" }
+    WhatsAppSession:
+      type: object
+      required: [status]
+      properties:
+        user_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [disconnected, connecting, qr, connected, reconnecting, logged_out]
+        phone_number: { type: [string, "null"] }
+        qrDataUrl: { type: [string, "null"] }
+        last_error: { type: [string, "null"] }
