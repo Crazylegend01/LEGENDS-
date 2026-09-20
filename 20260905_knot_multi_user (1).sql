@@ -147,6 +147,36 @@ create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
 
+-- Backfill accounts that existed before this migration was run.
+insert into public.profiles (id, email, role)
+select
+  u.id,
+  coalesce(u.email, ''),
+  case when u.raw_app_meta_data ->> 'role' = 'admin' then 'admin' else 'user' end
+from auth.users u
+on conflict (id) do update
+  set email = excluded.email,
+      role = excluded.role;
+
+insert into public.workspaces (owner_id, name)
+select
+  u.id,
+  split_part(coalesce(u.email, 'Knot'), '@', 1) || '''s workspace'
+from auth.users u
+where not exists (
+  select 1 from public.workspaces w where w.owner_id = u.id
+);
+
+insert into public.workspace_members (workspace_id, user_id, role)
+select w.id, w.owner_id, 'owner'
+from public.workspaces w
+where not exists (
+  select 1
+  from public.workspace_members wm
+  where wm.workspace_id = w.id and wm.user_id = w.owner_id
+)
+on conflict (workspace_id, user_id) do nothing;
+
 -- Keep the requested profile role synchronized for trusted admin changes.
 -- A user's client cannot promote itself because profiles has no self-update
 -- policy, and admin authorization still comes from app_metadata.
