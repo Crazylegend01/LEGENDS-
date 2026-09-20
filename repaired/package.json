@@ -1,0 +1,10 @@
+{
+  "name": "knot",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix api-server run build",
+    "start": "npm --prefix api-server start",
+    "typecheck": "npm --prefix api-server run typecheck"
+  }
+}
