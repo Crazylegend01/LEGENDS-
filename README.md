@@ -11,24 +11,18 @@ and is not linked from the public app.
 1. Open the Supabase SQL editor and run these migrations in order:
    `20260905_knot_multi_user.sql`,
    `20260908_knot_broadcast_backend.sql`,
-   `api-server/supabase/20260908_knot_linking.sql`, and
-   `20260909_knot_settings.sql`.
-   If the migrations have already been run, also run
-   `20260910_knot_fix_rls_recursion.sql` to repair the workspace policy cycle.
+   `api-server/supabase/20260908_knot_linking.sql`,
+   `20260909_knot_settings.sql`, and
+   `20260911_knot_permissions_and_storage.sql`.
 2. In Authentication > URL Configuration, add the URL where `index.html` will
    be hosted. The auth flow uses that URL for sign-up confirmation and reset
    links.
 3. Set the project URL and publishable browser key in `supabase-client.js`.
    The publishable key is safe for browser use. Never add a service-role key,
    GitHub token, or other secret to this static client.
-4. In Supabase Auth, create the administrator user. Set its server-controlled
-   `app_metadata` to:
-
-   ```json
-   { "role": "admin" }
-   ```
-
-   Do not put this value in `user_metadata`; users can edit that field.
+4. In Supabase, set the administrator's `profiles.role` to `admin`. The
+   database helper and API middleware both verify that profile row before
+   granting administrative access.
 5. Serve this folder from a web server. Opening `index.html` with `file://` can
    prevent browser module imports from working.
 
@@ -55,18 +49,23 @@ The API owns the Baileys session lifecycle, stores multi-file auth state in
 minute. Secret platform settings are write-only through the admin API; their
 values are never returned to the browser.
 
+The API uploads status media to Cloudinary using the server-only
+`CLOUDINARY_URL`. The final permissions migration also creates a private
+`knot-media` Supabase Storage bucket with authenticated, per-user policies for
+direct-upload or provider-fallback flows.
+
 ## Separate admin page
 
 Open `/admin.html` directly when you need the private admin surface. It asks
-for the administrator's Supabase email and password, then checks the trusted
-`app_metadata.role` claim before loading any platform data. There is no
-hardcoded admin email or client-side admin password. The public app does not
+for the administrator's Supabase email and password, then checks the
+authenticated user's `profiles.role` before loading any platform data. There is
+no hardcoded admin email or client-side admin password. The public app does not
 link to this page.
 
 The `handle_new_user` trigger creates a profile, an individual workspace, and
 an owner membership for every new account. The client never supplies a
-`user_id` from another account. RLS policies use `auth.uid()` and the trusted
-`app_metadata.role` claim, so admins can inspect all workspaces while ordinary
+`user_id` from another account. RLS policies use `auth.uid()` and the
+`profiles.role` helper, so admins can inspect all workspaces while ordinary
 users only see their own workspace membership and queue.
 
 ## Pricing and admin bypass
@@ -76,9 +75,9 @@ administrator can edit the amounts in the Naira pricing panel. There is no
 hardcoded payment account or gateway in this bundle.
 
 Free accounts are limited to 10 pending/processing queue items by a database
-trigger. The same trigger bypasses that limit for accounts whose JWT contains
-`app_metadata.role = "admin"`. RLS also grants admins platform-wide access;
-the browser-side admin flag is only a UX optimization.
+trigger. The same trigger bypasses that limit for accounts whose profile role is
+`admin`. RLS also grants admins platform-wide access; the public frontend does
+not display administrator status.
 
 ## Files
 

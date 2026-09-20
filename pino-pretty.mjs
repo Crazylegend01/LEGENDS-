@@ -17,9 +17,9 @@ var __commonJS = (cb, mod) => function __require2() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 
-// ../../node_modules/.pnpm/colorette@2.0.20/node_modules/colorette/index.cjs
+// node_modules/colorette/index.cjs
 var require_colorette = __commonJS({
-  "../../node_modules/.pnpm/colorette@2.0.20/node_modules/colorette/index.cjs"(exports) {
+  "node_modules/colorette/index.cjs"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var tty = __require("tty");
@@ -201,9 +201,9 @@ var require_colorette = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/wrappy@1.0.2/node_modules/wrappy/wrappy.js
+// node_modules/wrappy/wrappy.js
 var require_wrappy = __commonJS({
-  "../../node_modules/.pnpm/wrappy@1.0.2/node_modules/wrappy/wrappy.js"(exports, module) {
+  "node_modules/wrappy/wrappy.js"(exports, module) {
     module.exports = wrappy;
     function wrappy(fn, cb) {
       if (fn && cb) return wrappy(fn)(cb);
@@ -231,9 +231,9 @@ var require_wrappy = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/once@1.4.0/node_modules/once/once.js
+// node_modules/once/once.js
 var require_once = __commonJS({
-  "../../node_modules/.pnpm/once@1.4.0/node_modules/once/once.js"(exports, module) {
+  "node_modules/once/once.js"(exports, module) {
     var wrappy = require_wrappy();
     module.exports = wrappy(once);
     module.exports.strict = wrappy(onceStrict);
@@ -275,9 +275,9 @@ var require_once = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/end-of-stream@1.4.5/node_modules/end-of-stream/index.js
+// node_modules/end-of-stream/index.js
 var require_end_of_stream = __commonJS({
-  "../../node_modules/.pnpm/end-of-stream@1.4.5/node_modules/end-of-stream/index.js"(exports, module) {
+  "node_modules/end-of-stream/index.js"(exports, module) {
     var once = require_once();
     var noop = function() {
     };
@@ -358,9 +358,9 @@ var require_end_of_stream = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pump@3.0.4/node_modules/pump/index.js
+// node_modules/pump/index.js
 var require_pump = __commonJS({
-  "../../node_modules/.pnpm/pump@3.0.4/node_modules/pump/index.js"(exports, module) {
+  "node_modules/pump/index.js"(exports, module) {
     var once = require_once();
     var eos = require_end_of_stream();
     var fs;
@@ -433,14 +433,14 @@ var require_pump = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/split2@4.2.0/node_modules/split2/index.js
+// node_modules/split2/index.js
 var require_split2 = __commonJS({
-  "../../node_modules/.pnpm/split2@4.2.0/node_modules/split2/index.js"(exports, module) {
+  "node_modules/split2/index.js"(exports, module) {
     "use strict";
     var { Transform } = __require("stream");
     var { StringDecoder } = __require("string_decoder");
-    var kLast = /* @__PURE__ */ Symbol("last");
-    var kDecoder = /* @__PURE__ */ Symbol("decoder");
+    var kLast = Symbol("last");
+    var kDecoder = Symbol("decoder");
     function transform(chunk, enc, cb) {
       let list;
       if (this.overflow) {
@@ -534,11 +534,11 @@ var require_split2 = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-abstract-transport@3.0.0/node_modules/pino-abstract-transport/index.js
+// node_modules/pino-pretty/node_modules/pino-abstract-transport/index.js
 var require_pino_abstract_transport = __commonJS({
-  "../../node_modules/.pnpm/pino-abstract-transport@3.0.0/node_modules/pino-abstract-transport/index.js"(exports, module) {
+  "node_modules/pino-pretty/node_modules/pino-abstract-transport/index.js"(exports, module) {
     "use strict";
-    var metadata = /* @__PURE__ */ Symbol.for("pino.metadata");
+    var metadata = Symbol.for("pino.metadata");
     var split = require_split2();
     var { Duplex } = __require("stream");
     var { parentPort, workerData } = __require("worker_threads");
@@ -652,9 +652,9 @@ var require_pino_abstract_transport = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/constants.js
+// node_modules/pino-pretty/lib/constants.js
 var require_constants = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/constants.js"(exports, module) {
+  "node_modules/pino-pretty/lib/constants.js"(exports, module) {
     "use strict";
     module.exports = {
       DATE_FORMAT: "yyyy-mm-dd HH:MM:ss.l o",
@@ -698,9 +698,9 @@ var require_constants = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/get-level-label-data.js
+// node_modules/pino-pretty/lib/utils/get-level-label-data.js
 var require_get_level_label_data = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/get-level-label-data.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/get-level-label-data.js"(exports, module) {
     "use strict";
     module.exports = getLevelLabelData;
     var { LEVELS, LEVEL_NAMES } = require_constants();
@@ -720,9 +720,9 @@ var require_get_level_label_data = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/colors.js
+// node_modules/pino-pretty/lib/colors.js
 var require_colors = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/colors.js"(exports, module) {
+  "node_modules/pino-pretty/lib/colors.js"(exports, module) {
     "use strict";
     var nocolor = (input) => input;
     var plain = {
@@ -814,9 +814,9 @@ var require_colors = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/atomic-sleep@1.0.0/node_modules/atomic-sleep/index.js
+// node_modules/atomic-sleep/index.js
 var require_atomic_sleep = __commonJS({
-  "../../node_modules/.pnpm/atomic-sleep@1.0.0/node_modules/atomic-sleep/index.js"(exports, module) {
+  "node_modules/atomic-sleep/index.js"(exports, module) {
     "use strict";
     if (typeof SharedArrayBuffer !== "undefined" && typeof Atomics !== "undefined") {
       let sleep = function(ms) {
@@ -849,9 +849,9 @@ var require_atomic_sleep = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/sonic-boom@4.2.1/node_modules/sonic-boom/index.js
+// node_modules/sonic-boom/index.js
 var require_sonic_boom = __commonJS({
-  "../../node_modules/.pnpm/sonic-boom@4.2.1/node_modules/sonic-boom/index.js"(exports, module) {
+  "node_modules/sonic-boom/index.js"(exports, module) {
     "use strict";
     var fs = __require("fs");
     var EventEmitter = __require("events");
@@ -1436,18 +1436,18 @@ var require_sonic_boom = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/noop.js
+// node_modules/pino-pretty/lib/utils/noop.js
 var require_noop = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/noop.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/noop.js"(exports, module) {
     "use strict";
     module.exports = function noop() {
     };
   }
 });
 
-// ../../node_modules/.pnpm/on-exit-leak-free@2.1.2/node_modules/on-exit-leak-free/index.js
+// node_modules/on-exit-leak-free/index.js
 var require_on_exit_leak_free = __commonJS({
-  "../../node_modules/.pnpm/on-exit-leak-free@2.1.2/node_modules/on-exit-leak-free/index.js"(exports, module) {
+  "node_modules/on-exit-leak-free/index.js"(exports, module) {
     "use strict";
     var refs = {
       exit: [],
@@ -1539,9 +1539,9 @@ var require_on_exit_leak_free = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/build-safe-sonic-boom.js
+// node_modules/pino-pretty/lib/utils/build-safe-sonic-boom.js
 var require_build_safe_sonic_boom = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/build-safe-sonic-boom.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/build-safe-sonic-boom.js"(exports, module) {
     "use strict";
     module.exports = buildSafeSonicBoom;
     var { isMainThread } = __require("node:worker_threads");
@@ -1590,9 +1590,9 @@ var require_build_safe_sonic_boom = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/is-valid-date.js
+// node_modules/pino-pretty/lib/utils/is-valid-date.js
 var require_is_valid_date = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/is-valid-date.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/is-valid-date.js"(exports, module) {
     "use strict";
     module.exports = isValidDate;
     function isValidDate(date) {
@@ -1601,9 +1601,9 @@ var require_is_valid_date = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/create-date.js
+// node_modules/pino-pretty/lib/utils/create-date.js
 var require_create_date = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/create-date.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/create-date.js"(exports, module) {
     "use strict";
     module.exports = createDate;
     var isValidDate = require_is_valid_date();
@@ -1618,9 +1618,9 @@ var require_create_date = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/split-property-key.js
+// node_modules/pino-pretty/lib/utils/split-property-key.js
 var require_split_property_key = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/split-property-key.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/split-property-key.js"(exports, module) {
     "use strict";
     module.exports = splitPropertyKey;
     function splitPropertyKey(key) {
@@ -1653,9 +1653,9 @@ var require_split_property_key = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/get-property-value.js
+// node_modules/pino-pretty/lib/utils/get-property-value.js
 var require_get_property_value = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/get-property-value.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/get-property-value.js"(exports, module) {
     "use strict";
     module.exports = getPropertyValue;
     var splitPropertyKey = require_split_property_key();
@@ -1672,9 +1672,9 @@ var require_get_property_value = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/delete-log-property.js
+// node_modules/pino-pretty/lib/utils/delete-log-property.js
 var require_delete_log_property = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/delete-log-property.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/delete-log-property.js"(exports, module) {
     "use strict";
     module.exports = deleteLogProperty;
     var getPropertyValue = require_get_property_value();
@@ -1690,10 +1690,17 @@ var require_delete_log_property = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/fast-copy@4.0.4/node_modules/fast-copy/dist/cjs/index.cjs
+// node_modules/fast-copy/dist/cjs/index.cjs
 var require_cjs = __commonJS({
-  "../../node_modules/.pnpm/fast-copy@4.0.4/node_modules/fast-copy/dist/cjs/index.cjs"(exports) {
+  "node_modules/fast-copy/dist/cjs/index.cjs"(exports) {
     "use strict";
+    var MaxDepthExceededError = class extends RangeError {
+      constructor(maxDepth) {
+        super(`Maximum copy depth of ${String(maxDepth)} exceeded; the value copied is nested too deeply.`);
+        this.maxDepth = maxDepth;
+        this.name = "MaxDepthExceededError";
+      }
+    };
     var toStringFunction = Function.prototype.toString;
     var toStringObject = Object.prototype.toString;
     function getCleanClone(prototype) {
@@ -1721,6 +1728,7 @@ var require_cjs = __commonJS({
       return type.substring(8, type.length - 1);
     }
     var { propertyIsEnumerable } = Object.prototype;
+    var sliceTypedArray = Object.getPrototypeOf(Int8Array.prototype).slice;
     function copyOwnDescriptor(original, clone, property, state) {
       const ownDescriptor = Object.getOwnPropertyDescriptor(original, property) || {
         configurable: true,
@@ -1763,7 +1771,7 @@ var require_cjs = __commonJS({
       return copyOwnPropertiesStrict(array, clone, state);
     }
     function copyArrayBuffer(arrayBuffer, _state) {
-      return arrayBuffer.slice(0);
+      return ArrayBuffer.isView(arrayBuffer) ? sliceTypedArray.call(arrayBuffer, 0) : arrayBuffer.slice(0);
     }
     function copyBlob(blob, _state) {
       return blob.slice(0, blob.size, blob.type);
@@ -1825,10 +1833,11 @@ var require_cjs = __commonJS({
     function copySetStrict(set, state) {
       return copyOwnPropertiesStrict(set, copySetLoose(set, state), state);
     }
+    var DEFAULT_MAX_DEPTH = 1e3;
     function createDefaultCache() {
       return /* @__PURE__ */ new WeakMap();
     }
-    function getOptions({ createCache: createCacheOverride, methods: methodsOverride, strict }) {
+    function getOptions({ createCache: createCacheOverride, maxDepth, methods: methodsOverride, strict }) {
       const defaultMethods = {
         array: strict ? copyArrayStrict : copyArrayLoose,
         arrayBuffer: copyArrayBuffer,
@@ -1849,10 +1858,16 @@ var require_cjs = __commonJS({
       if (!copiers.Object || !copiers.Array) {
         throw new Error("An object and array copier must be provided.");
       }
-      return { createCache, copiers, methods, strict: Boolean(strict) };
+      return {
+        createCache,
+        copiers,
+        maxDepth: maxDepth == null ? DEFAULT_MAX_DEPTH : maxDepth,
+        methods,
+        strict: Boolean(strict)
+      };
     }
     function getTagSpecificCopiers(methods) {
-      return {
+      return Object.assign(/* @__PURE__ */ Object.create(null), {
         Arguments: methods.object,
         Array: methods.array,
         ArrayBuffer: methods.arrayBuffer,
@@ -1883,10 +1898,10 @@ var require_cjs = __commonJS({
         Uint8ClampedArray: methods.arrayBuffer,
         Uint16Array: methods.arrayBuffer,
         Uint32Array: methods.arrayBuffer
-      };
+      });
     }
     function createCopier(options = {}) {
-      const { createCache, copiers } = getOptions(options);
+      const { createCache, copiers, maxDepth } = getOptions(options);
       const { Array: copyArray, Object: copyObject } = copiers;
       function copier(value, state) {
         state.prototype = state.Constructor = void 0;
@@ -1896,40 +1911,49 @@ var require_cjs = __commonJS({
         if (state.cache.has(value)) {
           return state.cache.get(value);
         }
+        if (++state.depth > maxDepth) {
+          throw new MaxDepthExceededError(maxDepth);
+        }
         state.prototype = Object.getPrototypeOf(value);
         state.Constructor = state.prototype && state.prototype.constructor;
+        let clone;
         if (!state.Constructor || state.Constructor === Object) {
-          return copyObject(value, state);
+          clone = copyObject(value, state);
+        } else if (Array.isArray(value)) {
+          clone = copyArray(value, state);
+        } else {
+          const tagSpecificCopier = copiers[getTag(value)];
+          if (tagSpecificCopier) {
+            clone = tagSpecificCopier(value, state);
+          } else {
+            clone = typeof value.then === "function" ? value : copyObject(value, state);
+          }
         }
-        if (Array.isArray(value)) {
-          return copyArray(value, state);
-        }
-        const tagSpecificCopier = copiers[getTag(value)];
-        if (tagSpecificCopier) {
-          return tagSpecificCopier(value, state);
-        }
-        return typeof value.then === "function" ? value : copyObject(value, state);
+        --state.depth;
+        return clone;
       }
       return function copy2(value) {
         return copier(value, {
           Constructor: void 0,
           cache: createCache(),
           copier,
+          depth: 0,
           prototype: void 0
         });
       };
     }
     var copyStrict = createCopier({ strict: true });
     var copy = createCopier();
+    exports.MaxDepthExceededError = MaxDepthExceededError;
     exports.copy = copy;
     exports.copyStrict = copyStrict;
     exports.createCopier = createCopier;
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/filter-log.js
+// node_modules/pino-pretty/lib/utils/filter-log.js
 var require_filter_log = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/filter-log.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/filter-log.js"(exports, module) {
     "use strict";
     module.exports = filterLog;
     var { createCopier } = require_cjs();
@@ -1953,9 +1977,9 @@ var require_filter_log = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/dateformat@4.6.3/node_modules/dateformat/lib/dateformat.js
+// node_modules/dateformat/lib/dateformat.js
 var require_dateformat = __commonJS({
-  "../../node_modules/.pnpm/dateformat@4.6.3/node_modules/dateformat/lib/dateformat.js"(exports, module) {
+  "node_modules/dateformat/lib/dateformat.js"(exports, module) {
     "use strict";
     function _typeof(obj) {
       "@babel/helpers - typeof";
@@ -1972,7 +1996,7 @@ var require_dateformat = __commonJS({
     }
     (function(global2) {
       var _arguments = arguments;
-      var dateFormat = /* @__PURE__ */ (function() {
+      var dateFormat = /* @__PURE__ */ function() {
         var token = /d{1,4}|D{3,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|W{1,2}|[LlopSZN]|"[^"]*"|'[^']*'/g;
         var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g;
         var timezoneClip = /[^-+\dA-Z]/g;
@@ -2107,7 +2131,7 @@ var require_dateformat = __commonJS({
             return match.slice(1, match.length - 1);
           });
         };
-      })();
+      }();
       dateFormat.masks = { default: "ddd mmm dd yyyy HH:MM:ss", shortDate: "m/d/yy", paddedShortDate: "mm/dd/yyyy", mediumDate: "mmm d, yyyy", longDate: "mmmm d, yyyy", fullDate: "dddd, mmmm d, yyyy", shortTime: "h:MM TT", mediumTime: "h:MM:ss TT", longTime: "h:MM:ss TT Z", isoDate: "yyyy-mm-dd", isoTime: "HH:MM:ss", isoDateTime: "yyyy-mm-dd'T'HH:MM:sso", isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'", expiresHeaderFormat: "ddd, dd mmm yyyy HH:MM:ss Z" };
       dateFormat.i18n = { dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], timeNames: ["a", "p", "am", "pm", "A", "P", "AM", "PM"] };
       var pad = function pad2(val, len) {
@@ -2206,9 +2230,9 @@ var require_dateformat = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/format-time.js
+// node_modules/pino-pretty/lib/utils/format-time.js
 var require_format_time = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/format-time.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/format-time.js"(exports, module) {
     "use strict";
     module.exports = formatTime;
     var {
@@ -2245,9 +2269,9 @@ var require_format_time = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/handle-custom-levels-names-opts.js
+// node_modules/pino-pretty/lib/utils/handle-custom-levels-names-opts.js
 var require_handle_custom_levels_names_opts = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/handle-custom-levels-names-opts.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/handle-custom-levels-names-opts.js"(exports, module) {
     "use strict";
     module.exports = handleCustomLevelsNamesOpts;
     function handleCustomLevelsNamesOpts(cLevels) {
@@ -2270,9 +2294,9 @@ var require_handle_custom_levels_names_opts = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/handle-custom-levels-opts.js
+// node_modules/pino-pretty/lib/utils/handle-custom-levels-opts.js
 var require_handle_custom_levels_opts = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/handle-custom-levels-opts.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/handle-custom-levels-opts.js"(exports, module) {
     "use strict";
     module.exports = handleCustomLevelsOpts;
     function handleCustomLevelsOpts(cLevels) {
@@ -2298,9 +2322,9 @@ var require_handle_custom_levels_opts = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/interpret-conditionals.js
+// node_modules/pino-pretty/lib/utils/interpret-conditionals.js
 var require_interpret_conditionals = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/interpret-conditionals.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/interpret-conditionals.js"(exports, module) {
     "use strict";
     module.exports = interpretConditionals;
     var getPropertyValue = require_get_property_value();
@@ -2321,9 +2345,9 @@ var require_interpret_conditionals = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/is-object.js
+// node_modules/pino-pretty/lib/utils/is-object.js
 var require_is_object = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/is-object.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/is-object.js"(exports, module) {
     "use strict";
     module.exports = isObject;
     function isObject(input) {
@@ -2332,9 +2356,9 @@ var require_is_object = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/join-lines-with-indentation.js
+// node_modules/pino-pretty/lib/utils/join-lines-with-indentation.js
 var require_join_lines_with_indentation = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/join-lines-with-indentation.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/join-lines-with-indentation.js"(exports, module) {
     "use strict";
     module.exports = joinLinesWithIndentation;
     function joinLinesWithIndentation({ input, ident = "    ", eol = "\n" }) {
@@ -2347,9 +2371,9 @@ var require_join_lines_with_indentation = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/parse-factory-options.js
+// node_modules/pino-pretty/lib/utils/parse-factory-options.js
 var require_parse_factory_options = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/parse-factory-options.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/parse-factory-options.js"(exports, module) {
     "use strict";
     module.exports = parseFactoryOptions;
     var {
@@ -2445,9 +2469,9 @@ var require_parse_factory_options = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/fast-safe-stringify@2.1.1/node_modules/fast-safe-stringify/index.js
+// node_modules/fast-safe-stringify/index.js
 var require_fast_safe_stringify = __commonJS({
-  "../../node_modules/.pnpm/fast-safe-stringify@2.1.1/node_modules/fast-safe-stringify/index.js"(exports, module) {
+  "node_modules/fast-safe-stringify/index.js"(exports, module) {
     module.exports = stringify;
     stringify.default = stringify;
     stringify.stable = deterministicStringify;
@@ -2639,9 +2663,9 @@ var require_fast_safe_stringify = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-error.js
+// node_modules/pino-pretty/lib/utils/prettify-error.js
 var require_prettify_error = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-error.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/prettify-error.js"(exports, module) {
     "use strict";
     module.exports = prettifyError;
     var joinLinesWithIndentation = require_join_lines_with_indentation();
@@ -2671,9 +2695,9 @@ var require_prettify_error = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-object.js
+// node_modules/pino-pretty/lib/utils/prettify-object.js
 var require_prettify_object = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-object.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/prettify-object.js"(exports, module) {
     "use strict";
     module.exports = prettifyObject;
     var {
@@ -2736,9 +2760,9 @@ var require_prettify_object = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-error-log.js
+// node_modules/pino-pretty/lib/utils/prettify-error-log.js
 var require_prettify_error_log = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-error-log.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/prettify-error-log.js"(exports, module) {
     "use strict";
     module.exports = prettifyErrorLog;
     var {
@@ -2788,9 +2812,9 @@ var require_prettify_error_log = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-level.js
+// node_modules/pino-pretty/lib/utils/prettify-level.js
 var require_prettify_level = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-level.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/prettify-level.js"(exports, module) {
     "use strict";
     module.exports = prettifyLevel;
     var getPropertyValue = require_get_property_value();
@@ -2815,9 +2839,9 @@ var require_prettify_level = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-message.js
+// node_modules/pino-pretty/lib/utils/prettify-message.js
 var require_prettify_message = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-message.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/prettify-message.js"(exports, module) {
     "use strict";
     module.exports = prettifyMessage;
     var {
@@ -2862,9 +2886,9 @@ var require_prettify_message = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-metadata.js
+// node_modules/pino-pretty/lib/utils/prettify-metadata.js
 var require_prettify_metadata = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-metadata.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/prettify-metadata.js"(exports, module) {
     "use strict";
     module.exports = prettifyMetadata;
     function prettifyMetadata({ log, context }) {
@@ -2902,9 +2926,9 @@ var require_prettify_metadata = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-time.js
+// node_modules/pino-pretty/lib/utils/prettify-time.js
 var require_prettify_time = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/prettify-time.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/prettify-time.js"(exports, module) {
     "use strict";
     module.exports = prettifyTime;
     var formatTime = require_format_time();
@@ -2927,9 +2951,9 @@ var require_prettify_time = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/index.js
+// node_modules/pino-pretty/lib/utils/index.js
 var require_utils = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/utils/index.js"(exports, module) {
+  "node_modules/pino-pretty/lib/utils/index.js"(exports, module) {
     "use strict";
     module.exports = {
       buildSafeSonicBoom: require_build_safe_sonic_boom(),
@@ -2959,9 +2983,9 @@ var require_utils = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/secure-json-parse@4.1.0/node_modules/secure-json-parse/index.js
+// node_modules/secure-json-parse/index.js
 var require_secure_json_parse = __commonJS({
-  "../../node_modules/.pnpm/secure-json-parse@4.1.0/node_modules/secure-json-parse/index.js"(exports, module) {
+  "node_modules/secure-json-parse/index.js"(exports, module) {
     "use strict";
     var hasBuffer = typeof Buffer !== "undefined";
     var suspectProtoRx = /"(?:_|\\u005[Ff])(?:_|\\u005[Ff])(?:p|\\u0070)(?:r|\\u0072)(?:o|\\u006[Ff])(?:t|\\u0074)(?:o|\\u006[Ff])(?:_|\\u005[Ff])(?:_|\\u005[Ff])"\s*:/;
@@ -3063,9 +3087,9 @@ var require_secure_json_parse = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/pretty.js
+// node_modules/pino-pretty/lib/pretty.js
 var require_pretty = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/lib/pretty.js"(exports, module) {
+  "node_modules/pino-pretty/lib/pretty.js"(exports, module) {
     "use strict";
     module.exports = pretty;
     var sjs = require_secure_json_parse();
@@ -3198,9 +3222,9 @@ var require_pretty = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/index.js
+// node_modules/pino-pretty/index.js
 var require_pino_pretty = __commonJS({
-  "../../node_modules/.pnpm/pino-pretty@13.1.3/node_modules/pino-pretty/index.js"(exports, module) {
+  "node_modules/pino-pretty/index.js"(exports, module) {
     var { isColorSupported } = require_colorette();
     var pump = require_pump();
     var { Transform } = __require("node:stream");

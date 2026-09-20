@@ -37,15 +37,25 @@ export async function authenticateRequest(request: Request): Promise<User> {
   return data.user;
 }
 
-export function isAdmin(user: User): boolean {
-  return user.app_metadata?.["role"] === "admin";
+export async function isAdmin(user: User): Promise<boolean> {
+  const { data, error } = await getSupabaseAdmin()
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error("Unable to verify administrator access");
+  }
+
+  return data?.role === "admin";
 }
 
 export async function assertWorkspaceAccess(
   user: User,
   workspaceId: string,
 ): Promise<void> {
-  if (isAdmin(user)) return;
+  if (await isAdmin(user)) return;
 
   const { data, error } = await getSupabaseAdmin()
     .from("workspace_members")

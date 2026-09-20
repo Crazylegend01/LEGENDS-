@@ -4,17 +4,20 @@ import { getSupabaseAdmin, isAdmin } from "../lib/supabase";
 
 const router: IRouter = Router();
 
-function assertAdmin(request: Request): asserts request is Request & {
+async function assertAdmin(request: Request): Promise<Request & {
   knotUser: NonNullable<Request["knotUser"]>;
-} {
-  if (!request.knotUser || !isAdmin(request.knotUser)) {
+}> {
+  if (!request.knotUser || !(await isAdmin(request.knotUser))) {
     throw new Error("Administrator access required");
   }
+  return request as Request & {
+    knotUser: NonNullable<Request["knotUser"]>;
+  };
 }
 
 router.get("/admin/settings", requireUser, async (request, response) => {
   try {
-    assertAdmin(request);
+    await assertAdmin(request);
     const { data, error } = await getSupabaseAdmin()
       .from("platform_settings")
       .select("key,value,is_secret,is_public,description,updated_at")
@@ -38,7 +41,7 @@ router.get("/admin/settings", requireUser, async (request, response) => {
 
 router.patch("/admin/settings", requireUser, async (request, response) => {
   try {
-    assertAdmin(request);
+    await assertAdmin(request);
     const settings = request.body?.settings;
     if (!Array.isArray(settings) || settings.length === 0) {
       throw new Error("settings must be a non-empty array");

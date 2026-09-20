@@ -1,6 +1,5 @@
 import { supabase } from "./supabase-client.js";
 
-const FREE_QUEUE_LIMIT = 10;
 const state = {
   session: null,
   profile: null,
@@ -8,7 +7,6 @@ const state = {
   queue: [],
   plans: [],
   settings: {},
-  isAdmin: false,
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -62,10 +60,6 @@ function formatSchedule(value) {
     hour: "numeric",
     minute: "2-digit",
   });
-}
-
-function isAdminSession(session) {
-  return session?.user?.app_metadata?.role === "admin";
 }
 
 function emptyState(text) {
@@ -215,13 +209,12 @@ function renderUserShell() {
   setText("#queueSummary", `${pending} statuses queued across the next 7 days.`);
   setText("#workspaceName", workspace);
   setText("#userName", name);
-  setText("#userRole", state.isAdmin ? "Administrator" : "Owner");
   setText("#queueUserName", name);
   setText("#queueWorkspaceName", workspace);
   setText("#queuedCount", String(pending));
   setText("#completedCount", String(completed));
   setText("#connectedCount", String(sessionCount));
-  setText("#queueStatDelta", state.isAdmin ? "Admin limit bypassed" : `${FREE_QUEUE_LIMIT} free pending limit`);
+  setText("#queueStatDelta", "Updates from your queue");
   setText("#completedStatDelta", completed ? "Synced from your queue" : "No completed statuses yet");
   setText("#connectedStatDelta", sessionCount ? "Session data connected" : "Connect a number to begin");
 
@@ -231,65 +224,16 @@ function renderUserShell() {
   renderDayStrip(state.queue);
 }
 
-function renderAdminMetrics(profiles, workspaces, queue) {
-  setText("#adminWorkspaceCount", String(workspaces.length));
-  setText("#adminUserCount", String(profiles.length));
-  setText("#adminQueueCount", String(queue.length));
-  setText("#adminAdminCount", String(profiles.filter((profile) => profile.role === "admin").length));
-}
-
-function renderAdminTables(profiles, workspaces, queue, plans) {
-  const workspaceBody = $("#adminWorkspaceBody");
-  if (workspaceBody) {
-    if (!workspaces.length) {
-      workspaceBody.innerHTML = `<tr><td colspan="4">${escapeHtml("No workspaces yet.")}</td></tr>`;
-    } else {
-      workspaceBody.innerHTML = workspaces.map((workspace) => {
-        const owner = profiles.find((profile) => profile.id === workspace.owner_id);
-        const count = queue.filter((item) => item.workspace_id === workspace.id).length;
-        return `
-          <tr>
-            <td><div class="user-cell"><div class="user-avatar"></div><div>
-              <b>${escapeHtml(workspace.name)}</b>
-              <span>${escapeHtml(owner?.email || "Unknown owner")}</span>
-            </div></div></td>
-            <td>${escapeHtml(owner?.subscription_tier || "free")}</td>
-            <td>${count}</td>
-            <td><span class="status-badge scheduled">Active</span></td>
-          </tr>
-        `;
-      }).join("");
-    }
-  }
-
-  const planList = $("#pricingPlanList");
-  if (planList) {
-    planList.innerHTML = plans.map((plan) => `
-      <form class="pricing-row" data-pricing-plan="${escapeHtml(plan.id)}">
-        <label>
-          <span>${escapeHtml(plan.plan_type)} plan</span>
-          <input name="price_amount" type="number" min="0" step="0.01"
-            value="${escapeHtml(plan.price_amount)}" required>
-        </label>
-        <span class="currency-tag">NGN</span>
-        <button class="btn btn-primary btn-sm" type="submit">Save price</button>
-        <span class="pricing-message" role="status"></span>
-      </form>
-    `).join("") || emptyState("Pricing plans will appear after the migration runs.");
-  }
-}
-
 async function loadUserData() {
   await loadPublicData();
   const { data: sessionData } = await supabase.auth.getSession();
   state.session = sessionData.session;
-  state.isAdmin = isAdminSession(state.session);
   if (!state.session) return;
 
   const [profileResult, workspaceResult] = await Promise.all([
     supabase
       .from("profiles")
-      .select("id,email,role,subscription_tier,subscription_expires_at,whatsapp_session_data")
+      .select("id,email,subscription_tier,subscription_expires_at,whatsapp_session_data")
       .eq("id", state.session.user.id)
       .maybeSingle(),
     supabase
@@ -360,22 +304,6 @@ async function loadPublicData() {
   renderPublicPricing(state.plans, state.settings);
 }
 
-async function loadAdminData() {
-  if (!state.isAdmin) return;
-  const [profiles, workspaces, queue, plans] = await Promise.all([
-    supabase.from("profiles").select("id,email,role,subscription_tier,subscription_expires_at"),
-    supabase.from("workspaces").select("id,name,owner_id,created_at").order("created_at", { ascending: false }),
-    supabase.from("media_queue").select("id,workspace_id,user_id,status,scheduled_for"),
-    supabase.from("pricing_plans").select("id,plan_type,price_amount,currency").order("plan_type"),
-  ]);
-
-  for (const result of [profiles, workspaces, queue, plans]) {
-    if (result.error) throw result.error;
-  }
-  renderAdminMetrics(profiles.data || [], workspaces.data || [], queue.data || []);
-  renderAdminTables(profiles.data || [], workspaces.data || [], queue.data || [], plans.data || []);
-}
-
 async function refresh() {
   try {
     await loadUserData();
@@ -400,12 +328,6 @@ async function addQueueItem(form) {
 
   if (!caption && !(file instanceof File && file.size > 0)) {
     throw new Error("Add a caption or choose an image/video.");
-  }
-
-  if (!state.isAdmin
-    && state.profile?.subscription_tier === "free"
-    && state.queue.filter((item) => ["pending", "processing"].includes(item.status)).length >= FREE_QUEUE_LIMIT) {
-    throw new Error(`Free accounts can queue up to ${FREE_QUEUE_LIMIT} pending statuses.`);
   }
 
   if (file instanceof File && file.size > 0) {
@@ -443,7 +365,6 @@ document.addEventListener("submit", async (event) => {
 
 supabase.auth.onAuthStateChange(async (_event, session) => {
   state.session = session;
-  state.isAdmin = isAdminSession(session);
   if (!session) {
     state.profile = null;
     state.workspace = null;
@@ -456,7 +377,6 @@ supabase.auth.onAuthStateChange(async (_event, session) => {
 
 window.KnotData = {
   refresh,
-  isAdmin: () => state.isAdmin,
   getState: () => ({ ...state }),
 };
 

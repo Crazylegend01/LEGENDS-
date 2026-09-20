@@ -6,7 +6,7 @@ import {
   destroyCloudinaryAsset,
   uploadWhatsAppMedia,
 } from "../lib/cloudinary";
-import { assertWorkspaceAccess, getSupabaseAdmin } from "../lib/supabase";
+import { assertWorkspaceAccess, getSupabaseAdmin, isAdmin } from "../lib/supabase";
 
 const router: IRouter = Router();
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
@@ -118,6 +118,7 @@ router.get("/media/queue", requireUser, async (request, response) => {
 
   const workspaceId = request.query["workspaceId"];
   try {
+    const admin = await isAdmin(user);
     let query = getSupabaseAdmin()
       .from("media_queue")
       .select("*")
@@ -126,7 +127,8 @@ router.get("/media/queue", requireUser, async (request, response) => {
     if (typeof workspaceId === "string" && workspaceId) {
       await assertWorkspaceAccess(user, workspaceId);
       query = query.eq("workspace_id", workspaceId);
-    } else if (user.app_metadata?.["role"] !== "admin") {
+    }
+    if (!admin) {
       query = query.eq("user_id", user.id);
     }
     const { data, error } = await query;
@@ -149,12 +151,16 @@ router.delete("/media/queue/:id", requireUser, async (request, response) => {
   try {
     const { data: item, error: lookupError } = await getSupabaseAdmin()
       .from("media_queue")
-      .select("id,workspace_id,cloudinary_public_id,resource_type")
+      .select("id,user_id,workspace_id,cloudinary_public_id,resource_type")
       .eq("id", request.params["id"])
       .maybeSingle();
     if (lookupError) throw new Error(lookupError.message);
     if (!item) {
       response.status(404).json({ error: "Queue item not found" });
+      return;
+    }
+    if (!(await isAdmin(user)) && item.user_id !== user.id) {
+      response.status(403).json({ error: "You can only delete your own queue items" });
       return;
     }
     await assertWorkspaceAccess(user, item.workspace_id);

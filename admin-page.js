@@ -13,8 +13,14 @@ function escapeHtml(value = "") {
   }[character]));
 }
 
-function isAdminSession(session) {
-  return session?.user?.app_metadata?.role === "admin";
+async function isAdminSession(session) {
+  if (!session?.user?.id) return false;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", session.user.id)
+    .maybeSingle();
+  return !error && data?.role === "admin";
 }
 
 function setMessage(selector, text = "", isError = false) {
@@ -126,7 +132,7 @@ async function loadSettings() {
 }
 
 async function showAuthorizedPanel(session) {
-  if (!isAdminSession(session)) {
+  if (!(await isAdminSession(session))) {
     setPanelVisible(false);
     return;
   }
@@ -209,9 +215,9 @@ $("#adminLoginForm").addEventListener("submit", async (event) => {
   setMessage("#adminLoginMessage", "Checking access…");
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error || !isAdminSession(data.session)) {
-    if (data.session && !isAdminSession(data.session)) await supabase.auth.signOut();
-    setMessage("#adminLoginMessage", "Access denied. Use an account with app_metadata.role = admin.", true);
+  if (error || !(await isAdminSession(data.session))) {
+    if (data.session && !(await isAdminSession(data.session))) await supabase.auth.signOut();
+    setMessage("#adminLoginMessage", "Access denied. This account is not authorized for this area.", true);
     button.disabled = false;
     return;
   }
