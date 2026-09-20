@@ -1,92 +1,92 @@
-# Knot Multi-User Platform
+# Knot API server
 
-Knot is a glassmorphism WhatsApp status scheduler UI backed by Supabase
-Auth, PostgreSQL, and Row Level Security. The landing-page visual design is
-preserved, while the authenticated dashboard and queue read from the database
-instead of demo-only rows. Admin access lives on a separate `admin.html` page
-and is not linked from the public app.
+This artifact contains the persistent backend for Knot's Cloudinary media queue
+and WhatsApp status broadcaster.
+
+## Required Replit configuration
+
+Set these through Replit Secrets/environment settings:
+
+- `CLOUDINARY_URL` — the rotated Cloudinary URL.
+- `SUPABASE_SERVICE_ROLE_KEY` — the Supabase server-only key.
+- `SUPABASE_URL` — the Supabase project URL.
+
+The service-role key and Cloudinary URL must never be sent to the browser or
+committed to the repository.
 
 ## Supabase setup
 
-1. Open the Supabase SQL editor and run these migrations in order:
-   `20260905_knot_multi_user.sql`,
-   `20260908_knot_broadcast_backend.sql`,
-   `api-server/supabase/20260908_knot_linking.sql`,
-   `20260909_knot_settings.sql`, and
-   `20260911_knot_permissions_and_storage.sql`.
-2. In Authentication > URL Configuration, add the URL where `index.html` will
-   be hosted. The auth flow uses that URL for sign-up confirmation and reset
-   links.
-3. Set the project URL and publishable browser key in `supabase-client.js`.
-   The publishable key is safe for browser use. Never add a service-role key,
-   GitHub token, or other secret to this static client.
-4. In Supabase, set the administrator's `profiles.role` to `admin`. The
-   database helper and API middleware both verify that profile row before
-   granting administrative access.
-5. Serve this folder from a web server. Opening `index.html` with `file://` can
-   prevent browser module imports from working.
+Run the migrations in this order:
 
-## Run the backend
+`../20260905_knot_multi_user.sql`
 
-The static frontend cannot run Baileys or protect server credentials. Start the
-separate API process from `api-server`:
+Then run:
 
-```bash
-cd api-server
-npm install
-cp .env.example .env
-npm run build
-npm start
+`supabase/20260908_knot_broadcast_backend.sql`
+
+Then run:
+
+`supabase/20260908_knot_linking.sql`
+
+Then:
+
+`supabase/20260909_knot_settings.sql`
+
+The broadcast migration adds Cloudinary metadata, session status, retry
+metadata, and the atomic `claim_due_media_queue` function. The linking
+migration adds a per-user `whatsapp_session_files` table that stores the
+Baileys multi-file `creds.json` and Signal key files as JSONB rows. The API
+never exposes those files to the browser.
+
+## API routes
+
+All routes except health and the development upload page require a Supabase
+access token:
+
+`Authorization: Bearer <supabase-access-token>`
+
+- `POST /api/media/upload` — multipart `file`, `workspaceId`, `caption`,
+  optional `scheduledFor`. Uploads are transformed by Cloudinary and inserted
+  into `media_queue`.
+- `POST /api/media/queue/text` — queues a text-only status.
+- `GET /api/media/queue?workspaceId=<id>` — lists queue items.
+- `DELETE /api/media/queue/<id>` — removes a queue item and its Cloudinary asset.
+- `GET /api/whatsapp/session` — reads QR/connection status.
+- `POST /api/whatsapp/session/start` — starts the user's Baileys session.
+- `POST /api/whatsapp/session/pairing-code` — creates a phone-number pairing
+  code using digits with country code.
+- `DELETE /api/whatsapp/session` — logs out and clears the stored auth state.
+- `GET /api/admin/settings` — reads public settings and secret metadata for admins.
+- `PATCH /api/admin/settings` — writes pricing/payment/provider settings for admins.
+- `GET /api/upload-ui` — small development utility for exercising the upload
+  route from a browser.
+
+## Worker behavior
+
+The API process schedules a queue tick once per minute. The claim function uses
+Postgres row locks and `SKIP LOCKED`, so multiple API processes cannot claim
+the same item. Due rows are sent to Baileys' `status@broadcast` target through
+the owning user's active session, then marked `completed` or `failed`.
+
+The worker retries abandoned `processing` rows after 15 minutes. Failed rows
+retain a bounded error message and attempt count so the dashboard can expose
+the failure without logging credentials or message contents.
+
+## Dashboard linking module
+
+The existing static Knot dashboard now includes a glassmorphism **Link
+WhatsApp** panel with QR-code and pairing-code flows. It polls the authenticated
+session endpoint while the Baileys WebSocket is connecting and renders the
+animated infinity loader, QR image, pairing code, connected state, and unlink
+action.
+
+When the static dashboard and API are hosted on different origins, define this
+before loading `whatsapp-link.js`:
+
+```html
+<script>
+  window.KNOT_API_BASE_URL = "https://your-api-host.example/api";
+</script>
 ```
 
-Set the server-only Supabase service-role key and Cloudinary URL in the server
-environment, never in the browser. If the frontend is hosted on GitHub Pages,
-set `window.KNOT_API_BASE_URL` in `index.html` and `admin.html` to the deployed
-API URL ending in `/api`.
-
-The API owns the Baileys session lifecycle, stores multi-file auth state in
-`whatsapp_session_files`, handles media uploads, and runs the broadcaster every
-minute. Secret platform settings are write-only through the admin API; their
-values are never returned to the browser.
-
-The API uploads status media to Cloudinary using the server-only
-`CLOUDINARY_URL`. The final permissions migration also creates a private
-`knot-media` Supabase Storage bucket with authenticated, per-user policies for
-direct-upload or provider-fallback flows.
-
-## Separate admin page
-
-Open `/admin.html` directly when you need the private admin surface. It asks
-for the administrator's Supabase email and password, then checks the
-authenticated user's `profiles.role` before loading any platform data. There is
-no hardcoded admin email or client-side admin password. The public app does not
-link to this page.
-
-The `handle_new_user` trigger creates a profile, an individual workspace, and
-an owner membership for every new account. The client never supplies a
-`user_id` from another account. RLS policies use `auth.uid()` and the
-`profiles.role` helper, so admins can inspect all workspaces while ordinary
-users only see their own workspace membership and queue.
-
-## Pricing and admin bypass
-
-`pricing_plans` only accepts `NGN` and has weekly and monthly rows. An
-administrator can edit the amounts in the Naira pricing panel. There is no
-hardcoded payment account or gateway in this bundle.
-
-Free accounts are limited to 10 pending/processing queue items by a database
-trigger. The same trigger bypasses that limit for accounts whose profile role is
-`admin`. RLS also grants admins platform-wide access; the public frontend does
-not display administrator status.
-
-## Files
-
-- `auth.js` — public sign-up, sign-in, password reset, and protected navigation.
-- `admin.html` — unlinked admin login and private admin surface.
-- `admin-page.js` — Supabase Auth admin check, workspace metrics, and editable
-  Naira pricing.
-- `knot-data.js` — user-scoped workspace/queue rendering, queue creation, and
-  admin pricing/workspace data access.
-- `supabase/migrations/20260905_knot_multi_user.sql` — schema, signup trigger,
-  RLS policies, NGN pricing seed rows, and the free-tier database limit.
-- `supabase-client.js` — browser Supabase client using only a publishable key.
+The module defaults to `/api` for same-origin hosting.

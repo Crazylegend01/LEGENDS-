@@ -1,7 +1,6 @@
 import { supabase } from "./supabase-client.js";
 
 const $ = (selector) => document.querySelector(selector);
-const API_BASE_URL = String(window.KNOT_API_BASE_URL || "/api").replace(/\/$/, "");
 
 function escapeHtml(value = "") {
   return String(value).replace(/[&<>"']/g, (character) => ({
@@ -97,33 +96,34 @@ async function loadAdminData() {
   );
 }
 
-async function adminApi(path, options = {}) {
-  const { data, error } = await supabase.auth.getSession();
-  if (error || !data.session?.access_token) throw new Error("Admin session expired.");
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${data.session.access_token}`,
-      ...(options.headers || {}),
-    },
-  });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.error || "Admin API request failed.");
-  return body;
-}
-
 async function loadSettings() {
-  const result = await adminApi("/admin/settings");
+  // Read non-secret values only. Secret values are never selected into the
+  // browser; the form sends a replacement only when the admin enters one.
+  const [publicResult, secretResult] = await Promise.all([
+    supabase
+      .from("platform_settings")
+      .select("key,value,is_secret,is_public,description,updated_at")
+      .eq("is_secret", false)
+      .order("key"),
+    supabase
+      .from("platform_settings")
+      .select("key,is_secret,is_public,description,updated_at")
+      .eq("is_secret", true)
+      .order("key"),
+  ]);
+  if (publicResult.error) throw publicResult.error;
+  if (secretResult.error) throw secretResult.error;
+
   const form = $("#platformSettingsForm");
   if (!form) return;
-  for (const setting of result.settings || []) {
+  for (const setting of [
+    ...(publicResult.data || []).map((item) => ({ ...item, hasValue: Boolean(item.value) })),
+    ...(secretResult.data || []).map((item) => ({ ...item, value: null, hasValue: false })),
+  ]) {
     const input = form.elements.namedItem(setting.key);
     if (!input) continue;
     if (setting.is_secret) {
-      input.placeholder = setting.hasValue
-        ? "Saved securely. Leave blank to keep it"
-        : input.placeholder;
+      input.placeholder = "Stored securely. Leave blank to keep it";
       input.value = "";
     } else {
       input.value = setting.value || "";
@@ -195,10 +195,10 @@ document.addEventListener("submit", async (event) => {
 
   if (message) message.textContent = "Saving securely…";
   try {
-    await adminApi("/admin/settings", {
-      method: "PATCH",
-      body: JSON.stringify({ settings }),
-    });
+    const { error } = await supabase
+      .from("platform_settings")
+      .upsert(settings, { onConflict: "key" });
+    if (error) throw error;
     if (message) message.textContent = "Settings saved.";
     await loadSettings();
   } catch (error) {
